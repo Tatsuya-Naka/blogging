@@ -77,14 +77,14 @@ export const authOptions: NextAuthOptions = {
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        const dbUser = await prisma.user.findFirst({
-          where: {email: credentials.email},
-        });
+        // const dbUser = await prisma.user.findFirst({
+        //   where: {email: credentials.email},
+        // });
 
-        if (dbUser && dbUser.name === credentials.username) {
-          const {name, id, ...dbUserWithoutPassword} = dbUser;
-          return dbUserWithoutPassword;
-        }
+        // if (dbUser && dbUser.name === credentials.username && dbUser.password === credentials.password) {
+        //   const {name, password, id, ...dbUserWithoutPassword} = dbUser;
+        //   return dbUserWithoutPassword;
+        // }
         // const user = await this.authorize(credentails)
         return null;
         // const res = await fetch("http://localhost:3000/api/auth/callback", {
