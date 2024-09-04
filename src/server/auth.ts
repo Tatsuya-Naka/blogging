@@ -7,9 +7,12 @@ import {
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
 import GithubProvider from "next-auth/providers/github";
-
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaClient } from "@prisma/client";
 import { env } from "~/env";
 import { db } from "~/server/db";
+
+const prisma = new PrismaClient;
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -56,6 +59,49 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_ID,
+    }),
+    CredentialsProvider({
+      name: 'Sign in',
+      credentials: {
+        username: {label: "Username", type: "text", placeholder: "Name"},
+        email: {label: "Email", type: "email", placeholder: "email@example.com"},
+        password: { label: "Password", type: "password", placeholder: "Password"}
+      },
+      async authorize(credentials) {
+        if (!credentials || !credentials.username || !credentials.email || !credentials.password) {
+          return null;
+        }
+        // You need to provide your own logic here that takes the credentials
+        // submitted and returns either a object representing a user or value
+        // that is false/null if the credentials are invalid.
+        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
+        // You can also use the `req` object to obtain additional parameters
+        // (i.e., the request IP address)
+        const dbUser = await prisma.user.findFirst({
+          where: {email: credentials.email},
+        });
+
+        if (dbUser && dbUser.name === credentials.username) {
+          const {name, id, ...dbUserWithoutPassword} = dbUser;
+          return dbUserWithoutPassword;
+        }
+        // const user = await this.authorize(credentails)
+        return null;
+        // const res = await fetch("http://localhost:3000/api/auth/callback", {
+        //   method: 'POST',
+        //   body: JSON.stringify(credentials),
+        //   headers: { "Content-Type": "application/json" }
+        // })
+        // const user = await res.json()
+  
+        // // If no error and we have user data, return it
+        // if (res.ok && user) {
+        //   return user
+        // }
+        // // Return null if user data could not be retrieved
+        // return null
+        // return null;
+      }
     }),
     /**
      * ...add more providers here.
