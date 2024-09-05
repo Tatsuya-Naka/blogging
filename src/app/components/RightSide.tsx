@@ -14,7 +14,7 @@ export default async function RightSide() {
                         </div>
                         <div className="border-b px-4 py-3 flex flex-col gap-3">
                             <Link
-                                href="/home"
+                                href="/"
                                 className="hover:text-blue-600 text-black-600"
                             >
                                 Switch Branches in Git Without Losing Your Work
@@ -33,7 +33,7 @@ export default async function RightSide() {
                         </div>
                         <div className="border-b px-4 py-3 flex flex-col gap-3">
                             <Link
-                                href="/home"
+                                href="/"
                                 className="hover:text-blue-600 text-black-600"
                             >
                                 Switch Branches in Git Without Losing Your Work
@@ -52,7 +52,7 @@ export default async function RightSide() {
                         </div>
                         <div className="border-b px-4 py-3 flex flex-col gap-3">
                             <Link
-                                href="/home"
+                                href="/"
                                 className="hover:text-blue-600 text-black-600"
                             >
                                 Switch Branches in Git Without Losing Your Work
@@ -68,31 +68,31 @@ export default async function RightSide() {
                     <p className="font-bold text-sm">trending guides/resources</p>
                 </div>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     10 Things You Can Learn from Netflix’s Architecture
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     10 Things You Can Learn from Netflix’s Architecture
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     10 Things You Can Learn from Netflix’s Architecture
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     10 Things You Can Learn from Netflix’s Architecture
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     10 Things You Can Learn from Netflix’s Architecture
@@ -105,31 +105,31 @@ export default async function RightSide() {
                     <p className="font-bold text-sm">recently queried</p>
                 </div>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     Python
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     Python
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     Python
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     Python
                 </Link>
                 <Link
-                    href="/home"
+                    href="/"
                     className="px-5 py-3 w-full text-lg font-medium text-gray-500 hover:text-blue-500 hover:bg-white"
                 >
                     Python

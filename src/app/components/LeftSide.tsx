@@ -12,7 +12,7 @@ export default async function LeftSide() {
     const session = await getServerAuthSession();
 
     return (
-        <div className="ç">
+        <div className="py-3">
             {!session &&
                 <div className="shadow-md bg-white rounded-lg">
                     <div className="px-4 py-3">

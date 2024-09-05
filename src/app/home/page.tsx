@@ -14,21 +14,18 @@ const HomePage = async () => {
 
     return (
         <HydrateClient>
-            <Header session={session} />
+            <Header userData={session.user}/>
             <main className="px-8 py-16 w-full bg-gray-100">
                 <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-1">
                         <LeftSide />
                     </div>
                     <div className="col-span-3">
-                        <CenterPage session={session}/>
+                        <CenterPage userData={session?.user}/>
                     </div>
                     <div className="col-span-2">
                         <RightSide />
                     </div>
-                    {/* <LeftSide />
-                    <CenterPage />
-                    <RightSide /> */}
                 </div>
             </main>
         </HydrateClient>

@@ -1,9 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Header({ session }: any) {
-    // const session = await getServerAuthSession();
-    // const { data: sessionData, status } = useSession();
+type CustomType = {
+    name?: string | null;    // Allow string, null, or undefined
+    email?: string | null;   // Allow string, null, or undefined
+    id: string;              // Keep this as string since it's required
+    image?: string | null;   // Allow string, null, or undefined
+};
+
+interface Props {
+    userData?: CustomType
+};
+
+export default function Header({ userData }: Props) {
+    // const userData = await getServerAuthuserData();
+    // const { data: userDataData, status } = useuserData();
     return (
         <nav className="bg-gray-800 top-0 w-full z-50 fixed">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -22,10 +33,10 @@ export default function Header({ session }: any) {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                             {/* <!--
-            Icon when menu is open.
+                            Icon when menu is open.
 
-            Menu open: "block", Menu closed: "hidden"
-          --> */}
+                            Menu open: "block", Menu closed: "hidden"
+                            --> */}
                             <svg className="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -101,7 +112,7 @@ export default function Header({ session }: any) {
                             {/* </div> */}
                         </div>
                     </div>
-                    {session ? <>
+                    {userData ? <>
                         {/* <div className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white logout">Logout</div>
                          */}
                         <Link
@@ -120,16 +131,16 @@ export default function Header({ session }: any) {
                         </Link>
                     </>}
                     <Link
-                        href={session ? "/api/auth/signout" : "/api/auth/signin"}
+                        href={userData ? "/api/auth/signout" : "/api/auth/signin"}
                         // className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
                         className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
-                        {session ? "Sign out" : "Sign in"}
+                        {userData ? "Sign out" : "Sign in"}
                     </Link>
-                    {session &&
+                    {userData &&
                         <Image
-                            src={session?.user?.image}
-                            alt={session?.user?.name}
+                            src={userData.image || ""}
+                            alt={userData.name || "User"}
                             width={40}
                             height={40}
                             style={{ borderRadius: '50%' }}
