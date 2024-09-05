@@ -1,8 +1,31 @@
 import Link from "next/link"
 import Image from "next/image"
 import { CgMoreAlt } from "react-icons/cg";
+import { StaticImageData } from 'next/image';
 
-export default function Notif({ category, title, subtitle, image, link, description, comment, session }: any) {
+type CustomType = {
+    name?: string | null;    // Allow string, null, or undefined
+    email?: string | null;   // Allow string, null, or undefined
+    id: string;              // Keep this as string since it's required
+    image?: string | null;   // Allow string, null, or undefined
+};
+
+// interface Props {
+//     userData?: CustomType
+// };
+
+type Type = {
+    category: string;
+    title: string;
+    subtitle: string;
+    image: StaticImageData;
+    link: string;
+    description: string;
+    comment: string;
+    userData?: CustomType;
+};
+
+export default function Notif({ category, title, subtitle, image, link, description, comment, userData }: Type) {
     return (
         <div className="shadow-md bg-white rounded-lg">
             <div className="px-6 py-5 flex flex-col gap-4">
@@ -15,7 +38,7 @@ export default function Notif({ category, title, subtitle, image, link, descript
                 <div className="...">
                     <div className="flex flex-col gap-3 px-20">
                         <Image
-                            src={image}
+                            src={image || ""}
                             alt={title}
                             style={{ width: "100%", height: "auto", borderRadius: "15px" }}
                         />

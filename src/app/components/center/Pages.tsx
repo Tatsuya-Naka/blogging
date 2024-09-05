@@ -2,7 +2,19 @@ import { CiBookmark } from "react-icons/ci";
 import Image from "next/image";
 import { FaRegComment } from "react-icons/fa6";
 
-export default function Pages({ image, user, team, date, title, tags, reactions, comments, record }: any) {
+type CustomeType = {
+    image: string,
+    user: string,
+    team: string,
+    date: string,
+    title: string,
+    tags: string[],
+    reactions: number,
+    comments: number, 
+    record: number,
+};
+
+export default function Pages({ image, user, team, date, title, tags, reactions, comments, record }: CustomeType) {
     return (
         <div className="shadow-md bg-white rounded-lg">
             <div className="px-5 py-2 flex gap-4">
@@ -28,7 +40,7 @@ export default function Pages({ image, user, team, date, title, tags, reactions,
                         {title}
                     </div>
                     <div className="flex gap-2">
-                        {tags.map((tag: string, index: string) => {
+                        {tags.map((tag, index) => {
                             return <span key={index}>#{tag}</span>;
                         })}
                     </div>
