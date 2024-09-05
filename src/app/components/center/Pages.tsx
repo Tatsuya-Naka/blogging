@@ -28,7 +28,7 @@ export default function Pages({ image, user, team, date, title, tags, reactions,
                         {title}
                     </div>
                     <div className="flex gap-2">
-                        {tags.map((tag, index) => {
+                        {tags.map((tag: string, index: number) => {
                             return <span key={index}>#{tag}</span>;
                         })}
                     </div>

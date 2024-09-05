@@ -7,12 +7,12 @@ import simpleImage from "./images/simple.png";
 import simpleImage_a from "./images/simple_a.png";
 import Pages from "./center/Pages";
 
-export default function CenterPage({ session }) {
+export default function CenterPage({ session }: any) {
     // const session = await getServerAuthSession();
     // const [selectedLink, setSelectedLink] = useState("/home");
     // const selectedLink = "/home";
     const pathname = usePathname();
-    const tags = ["devchallenge", "nylaschallenge", "ai", "api"];
+    const tags: string[] = ["devchallenge", "nylaschallenge", "ai", "api"];
 
     return (
         <div className="flex flex-col px-4 py-3">
