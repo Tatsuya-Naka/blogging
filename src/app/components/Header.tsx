@@ -139,8 +139,8 @@ export default function Header({ userData }: Props) {
                     </Link>
                     {userData &&
                         <Image
-                            src={userData.image || ""}
-                            alt={userData.name || "User"}
+                            src={userData.image ?? ""}
+                            alt={userData.name ?? "User"}
                             width={40}
                             height={40}
                             style={{ borderRadius: '50%' }}

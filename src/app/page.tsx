@@ -1,6 +1,6 @@
 // import Link from "next/link";
 // import { signIn, signOut } from "next-auth/react";
-import { LatestPost } from "./api/_components/post";
+// import { LatestPost } from "./api/_components/post";
 import { getServerAuthSession } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 import Header from "./components/Header";

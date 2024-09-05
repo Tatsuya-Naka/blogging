@@ -78,9 +78,9 @@ export default function CenterPage({ userData }: Props) {
                     userData={userData}
                 />
                 <Pages
-                    image={userData?.image || ""}
-                    user={userData?.name || "Admin"}
-                    team={userData?.name || "Admnin"}
+                    image={userData?.image ?? ""}
+                    user={userData?.name ?? "Admin"}
+                    team={userData?.name ?? "Admnin"}
                     date={"Sep 5"}
                     title={"Congrats to the Nylas Challenge Winners!"}
                     tags={tags}
