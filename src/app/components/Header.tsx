@@ -1,10 +1,11 @@
-"use client";
 import Link from "next/link";
+import Image from "next/image";
 
-export default function Header({ userData }: any) {
+export default function Header({ session }: any) {
+    // const session = await getServerAuthSession();
     // const { data: sessionData, status } = useSession();
     return (
-        <nav className="bg-gray-800">
+        <nav className="bg-gray-800 top-0 w-full z-50 fixed">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -100,7 +101,7 @@ export default function Header({ userData }: any) {
                             {/* </div> */}
                         </div>
                     </div>
-                    {userData ? <>
+                    {session ? <>
                         {/* <div className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white logout">Logout</div>
                          */}
                         <Link
@@ -119,12 +120,21 @@ export default function Header({ userData }: any) {
                         </Link>
                     </>}
                     <Link
-                        href={userData ? "/api/auth/signout" : "/api/auth/signin"}
+                        href={session ? "/api/auth/signout" : "/api/auth/signin"}
                         // className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
                         className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                     >
-                        {userData ? "Sign out" : "Sign in"}
+                        {session ? "Sign out" : "Sign in"}
                     </Link>
+                    {session &&
+                        <Image
+                            src={session?.user?.image}
+                            alt={session?.user?.name}
+                            width={40}
+                            height={40}
+                            style={{ borderRadius: '50%' }}
+                        />
+                    }
                 </div>
             </div>
 
