@@ -106,7 +106,7 @@ export default function PostMain({ userData }: Props) {
                                     <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
                                     <span>You have unsaved changes</span>
                                 </DialogTitle>
-                                <p className="mt-2">You've made changes to your post. Do you want to leave this page?</p>
+                                <p className="mt-2">You have made changes to your post. Do you want to leave this page?</p>
                                 <div className="mt-4 flex justify-end space-x-2">
                                     <button
                                         className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
