@@ -14,8 +14,13 @@ const config = {
             // port: '',
             // pathname: '/account123/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'media.dev.to',
+          },
         ],
       },
+      
 };
 
 export default config;

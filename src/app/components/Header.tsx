@@ -1,5 +1,8 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
+import { CiSearch } from "react-icons/ci";
+import { useState } from "react";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -9,156 +12,224 @@ type CustomType = {
 };
 
 interface Props {
-    userData?: CustomType
+    userData?: CustomType;
+    isSideBar: boolean;
+    setIsSideBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Header({ userData }: Props) {
-    // const userData = await getServerAuthuserData();
-    // const { data: userDataData, status } = useuserData();
+export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
+    const [isClicked, setIsClicked] = useState(false);
+
+    const handleDropDown = () => {
+        setIsClicked(prevState => !prevState);
+        console.log("Acount icon is clicked");
+    };
+
+    const handleSideBar = () => {
+        setIsSideBar(true);
+        console.log("Click Edit Bar");
+    }
+
     return (
-        <nav className="bg-gray-800 top-0 w-full z-50 fixed">
-            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                <div className="relative flex h-16 items-center justify-between">
-                    <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                        {/* <!-- Mobile menu button--> */}
-                        <button type="button" className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-                            <span className="absolute -inset-0.5"></span>
-                            <span className="sr-only">Open main menu</span>
-                            {/* <!--
-            Icon when menu is closed.
-
-            Menu open: "hidden", Menu closed: "block"
-          --> */}
-                            <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                            {/* <!--
-                            Icon when menu is open.
-
-                            Menu open: "block", Menu closed: "hidden"
-                            --> */}
-                            <svg className="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    <form className="flex items-center max-w-lg mx-auto">
-                        <label htmlFor="voice-search" className="sr-only">Search</label>
-                        <div className="relative w-full">
-                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.15 5.6h.01m3.337 1.913h.01m-6.979 0h.01M5.541 11h.01M15 15h2.706a1.957 1.957 0 0 0 1.883-1.325A9 9 0 1 0 2.043 11.89 9.1 9.1 0 0 0 7.2 19.1a8.62 8.62 0 0 0 3.769.9A2.013 2.013 0 0 0 13 18v-.857A2.034 2.034 0 0 1 15 15Z" />
-                                </svg>
-                            </div>
-                            <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos, Design Templates..." required />
-                            <button type="button" className="absolute inset-y-0 end-0 flex items-center pe-3">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7v3a5.006 5.006 0 0 1-5 5H6a5.006 5.006 0 0 1-5-5V7m7 9v3m-3 0h6M7 1h2a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V4a3 3 0 0 1 3-3Z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <button type="submit" className="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            <svg className="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>Search
-                        </button>
-                    </form>
-                    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                        <div className="flex flex-shrink-0 items-center">
-                            {/* <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> */}
-                        </div>
-                        {/* <div className="hidden sm:ml-6 sm:block">
-                            <div className="flex space-x-4">
-                                <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Dashboard</a>
-                                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
-                                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
-                                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>
-                            </div>
-                        </div> */}
-                    </div>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        <button type="button" className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="absolute -inset-1.5"></span>
-                            <span className="sr-only">View notifications</span>
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                            </svg>
-                        </button>
-
-                        {/* <!-- Profile dropdown --> */}
-                        <div className="relative ml-3">
-                            <div>
-                                <button type="button" className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                    <span className="absolute -inset-1.5"></span>
-                                    <span className="sr-only">Open user menu</span>
-                                    {/* <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""> */}
-                                </button>
-                            </div>
-                            {/* <!--
-                            Dropdown menu, show/hide based on menu state.
-
-                            Entering: "transition ease-out duration-100"
-                            From: "transform opacity-0 scale-95"
-                            To: "transform opacity-100 scale-100"
-                            Leaving: "transition ease-in duration-75"
-                            From: "transform opacity-100 scale-100"
-                            To: "transform opacity-0 scale-95"
-                        --> */}
-                            {/* <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"> */}
-                            {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-                            {/* <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-0">Your Profile</a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-1">Settings</a> */}
-                            {/* <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-2">Sign out</a> */}
-                            {/* </div> */}
-                        </div>
-                    </div>
-                    {userData ? <>
-                        {/* <div className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white logout">Logout</div>
-                         */}
-                        <Link
-                            href="/api/auth/signout"
-                            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+        <nav className="bg-white z-[100] top-0 left-0 right-0 w-full h-[56px] fixed box-border">
+            <div className="flex items-center relative px-[0.5rem] max-w-[1380px] m-auto h-[56px] box-border">
+                <div className="flex items-center">
+                    <div className="flex breakPointEngine:hidden inline-block">
+                        <button
+                            className="mx-2 p-[0.5rem] bg-transparent hover:bg-engineMarkBGHover text-editColor hover:text-loginHover rounded-[0.375rem] text-center border-none "
+                            onClick={handleSideBar}
                         >
-                            Logout
-                        </Link>
-                    </> : <>
-                        {/* <div className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white login">Login</div> */}
-                        <Link
-                            href="/api/auth/signin"
-                            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                        >
-                            Login
-                        </Link>
-                    </>}
-                    <Link
-                        href={userData ? "/api/auth/signout" : "/api/auth/signin"}
-                        // className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                        {userData ? "Sign out" : "Sign in"}
-                    </Link>
-                    {userData &&
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="akiagd5s7pl3860fbzp7yxg5owy2sfbn" className="..."><title id="akiagd5s7pl3860fbzp7yxg5owy2sfbn">Navigation menu</title>
+                                <path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <a href={userData ? "/home" : "/"}>
                         <Image
-                            src={userData.image ?? ""}
-                            alt={userData.name ?? "User"}
-                            width={40}
+                            src="https://media.dev.to/cdn-cgi/image/quality=100/https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png"
+                            alt="Image Icon"
                             height={40}
-                            style={{ borderRadius: '50%' }}
+                            width={50}
                         />
-                    }
+                    </a>
                 </div>
-            </div>
+                <div className="flex flex-1-auto mx-[1rem] items-center max-w-[680px] box-border">
+                    <form className="block box-border w-full">
+                        {/* <input className="flex breakPointEngine:hidden" placeholder="Search..."/> */}
+                        <div className="breakPointEngine:flex hidden flex-row flex-wrap">
+                            <div className="relative flex-1 flex flex-col text-[1rem]">
+                                <input
+                                    type="text"
+                                    id="search"
+                                    className="pl-[40px] pr-[142px] leading-relaxed py-[calc(0.5rem-2.5px)] px-0.5rem text-[1rem] w-full resize-y border-[1.5px] border-borderColor appearance-none rounded-[0.375rem] transition-all duration-100 ease-custom-bezier"
+                                    placeholder="Search..."
+                                />
+                                <button
+                                    type="submit"
+                                    className="absolute py-0 mt-0 right-auto inset-px p-[0.5rem] bg-transparent hover:bg-logInBg text-engineBorderColor hover:text-createBorderHover inline-block rounded-[0.375rem] text-center rounded-none"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="crayons-icon c-btn__icon" focusable="false">
+                                        <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0111 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 01-1.969 5.617zm-2.006-.742A6.977 6.977 0 0018 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 004.875-1.975l.15-.15z"></path>
+                                    </svg>
+                                </button>
+                                <a
+                                    className="absolute right-[8px] top-[3px] block text-[13px] text-[#717171] pl-[3px] flex items-center bg-white mt-[0.5rem] flex gap-1"
+                                    href="https://www.algolia.com/developers/?utm_source=devto&amp;utm_medium=referral"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Powered by
+                                    {/* <span className="sr-only w-[135.56px] h-[19.5px]">Powered by</span> */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" width="14" height="14" viewBox="0 0 500 500.34">
+                                        <path className="cls-1 fill-[#717171] align-2" d="M250,0C113.38,0,2,110.16,.03,246.32c-2,138.29,110.19,252.87,248.49,253.67,42.71,.25,83.85-10.2,120.38-30.05,3.56-1.93,4.11-6.83,1.08-9.52l-23.39-20.74c-4.75-4.22-11.52-5.41-17.37-2.92-25.5,10.85-53.21,16.39-81.76,16.04-111.75-1.37-202.04-94.35-200.26-206.1,1.76-110.33,92.06-199.55,202.8-199.55h202.83V407.68l-115.08-102.25c-3.72-3.31-9.43-2.66-12.43,1.31-18.47,24.46-48.56,39.67-81.98,37.36-46.36-3.2-83.92-40.52-87.4-86.86-4.15-55.28,39.65-101.58,94.07-101.58,49.21,0,89.74,37.88,93.97,86.01,.38,4.28,2.31,8.28,5.53,11.13l29.97,26.57c3.4,3.01,8.8,1.17,9.63-3.3,2.16-11.55,2.92-23.6,2.07-35.95-4.83-70.39-61.84-127.01-132.26-131.35-80.73-4.98-148.23,58.18-150.37,137.35-2.09,77.15,61.12,143.66,138.28,145.36,32.21,.71,62.07-9.42,86.2-26.97l150.36,133.29c6.45,5.71,16.62,1.14,16.62-7.48V9.49C500,4.25,495.75,0,490.51,0H250Z"></path>
+                                    </svg>
+                                    Algoria
+                                </a>
+                            </div>
 
-            {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-            <div className="sm:hidden" id="mobile-menu">
-                <div className="space-y-1 px-2 pb-3 pt-2">
-                    {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                    <a href="#" className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
-                    <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
-                    <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
-                    <a href="#" className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>
+                        </div>
+
+
+                    </form>
                 </div>
+
+                <div className="flex items-center h-100 ml-auto">
+                    <div className="flex breakPointEngine:hidden">
+                        <Link
+                            href="/research"
+                            className="bg-white text-engineBorderColor font-[700] mx-1 p-[0.5rem] inline-block rounded-[0.375rem] w-full hover:text-createBorderHover hover:bg-engineMarkBGHover"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="..." focusable="false">
+                                <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0111 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 01-1.969 5.617zm-2.006-.742A6.977 6.977 0 0018 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 004.875-1.975l.15-.15z"></path>
+                            </svg>
+                        </Link>
+                    </div>
+                    {!userData &&
+                        <span className="block breakPointEngine:flex hidden">
+                            <Link
+                                href={userData ? "/api/auth/signout" : "/api/auth/signin"}
+                                className="flex items-center mr-2 justify-center bg-transparent hover:bg-logInBg text-loginText hover:text-loginHover px-[calc(1.3rem-2.1px)] py-[calc(0.5rem-1px)] rounded-[0.375rem] border border-transparent hover:border-logInHover"
+                            >
+                                {userData ? "Log out" : "Log in"}
+                            </Link>
+                        </span>
+                    }
+
+                    <span className={userData ? "breakPointEngine:flex hidden" : "..."}>
+                        <Link
+                            href={userData ? `/create-post/${userData.id}` : "/api/auth/signin"}
+                            className="flex items-center mr-[0.5rem] justify-center bg-transparent hover:bg-createAccountBG text-createAccountBG hover:text-white border-createAccountBG hover:border-createBorderHover border-[1px] px-[calc(1rem-1px)] py-[calc(0.5rem-1px)] rounded-[0.375rem]"
+                        >
+                            {userData ? "Create post" : "Create account"}
+                        </Link>
+                    </span>
+                    <span className={userData ? "flex" : "hidden"}>
+                        <a
+                            href="#"
+                            className="ml-1 mr-1 p-[0.5rem] inline-block bg-white text-engineBorderColor rounded-[0.375rem] w-full hover:text-createBorderHover hover:bg-engineMarkBGHover"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="ag67jryrrxfeudbtdh5exqkxj1our9kb" className="..."><title id="ag67jryrrxfeudbtdh5exqkxj1our9kb">Notifications</title>
+                                <path d="M20 17h2v2H2v-2h2v-7a8 8 0 1116 0v7zm-2 0v-7a6 6 0 10-12 0v7h12zm-9 4h6v2H9v-2z"></path>
+                            </svg>
+                        </a>
+                    </span>
+                    <span className={userData ? "flex" : "hidden"}>
+                        <div className="mx-1" onClick={handleDropDown}>
+                            <button
+                                type="button"
+                                className="items-center flex p-1 rounded-full bg-transparent hover:text-createBorderHover hover:bg-engineMarkBGHover text-editColor text-center"
+                            >
+                                <Image
+                                    src={userData?.image ?? ""}
+                                    alt={userData?.name ?? ""}
+                                    width={32}
+                                    height={32}
+                                    style={{ borderRadius: '50%' }}
+                                />
+                                {/* <img src={userData?.image ?? ""} alt={userData?.name ?? ""} style={{borderRadius: "50%", width: "100%", height: "auto"}} /> */}
+                            </button>
+                            {/* {isClicked &&
+                                <div
+                                    className="absolute z-10 sm:left-auto left-2 right-2 inline-block bg-white text-engineBorderColor rounded-[0.375rem] shadow-xl p-[0.5rem] top-full mt-[0.25rem] sm:max-w-[360px] sm:w-full min-w-[250px]"
+                                >
+                                    <ul className="block">
+                                        <li className="text-left pb-2 mb-2 border-b-1 border-0 border-solid border-[#d6d6d7]">
+                                            <a
+                                                href="#"
+                                                className="leading-5 bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                            >
+                                                <div>
+                                                    <span className="block font-[500] ">{userData?.name}</span>
+                                                    <span className="text-[0.875rem] opacity-75">{userData?.id}</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            } */}
+                        </div>
+                    </span>
+                </div>
+                {isClicked &&
+                    <div
+                        className="absolute z-[100] sm:w-[250px] sm:left-auto left-2 right-2 inline-block bg-white text-engineBorderColor rounded-[0.375rem] shadow-xl p-[0.5rem] top-full mt-[0.25rem] sm:max-w-[360px] sm:w-full min-w-[250px]"
+                    >
+                        <ul className="block">
+                            <li className="text-left pb-2 mb-2 border-b border-0 border-solid border-[#d6d6d7]">
+                                <a
+                                    href="#"
+                                    className="leading-5 bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                >
+                                    <div>
+                                        <span className="block font-[500] ">{userData?.name}</span>
+                                        <span className="text-[0.875rem] opacity-75">{userData?.id}</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    className="bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                >
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href={userData ? `/create-post/${userData.id}` : "/"}
+                                    className="bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                >
+                                    Create Post
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    className="bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                >
+                                    Reading List
+                                </a>
+                            </li>
+                            <li className="pb-2 border-b border-0 border-solid border-[#d6d6d7]">
+                                <a
+                                    href="#"
+                                    className="bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                >
+                                    Settings
+                                </a>
+                            </li>
+                            <li className="pt-2">
+                                <a
+                                    href="/api/auth/signout"
+                                    className="bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
+                                >
+                                    Sign Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
         </nav>
     );
-};
+}

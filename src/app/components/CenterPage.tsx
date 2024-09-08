@@ -7,6 +7,8 @@ import simpleImage from "./images/simple.png";
 import simpleImage_a from "./images/simple_a.png";
 import Pages from "./center/Pages";
 import { useEffect } from "react";
+import Ad from "./center/Ad";
+import PageWithPic from "./center/PageWithPic";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -30,33 +32,39 @@ export default function CenterPage({ userData }: Props) {
         console.log(userData);
     }, [])
     return (
-        <div className="flex flex-col px-4 py-3">
-            <div className="py-4">
-                <Link
-                    href="/home"
-                    className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/home" || pathname === "/" ? "font-bold text-black-500" : "text-gray-300"
-                        } hover:text-blue-500 hover:bg-gray-200`}
-                // className="rounded-md px-3 py-2 text-sm font-medium text-black-300 font-bold hover:text-blue hover:bg-white-500"
-                >
-                    Relevant
-                </Link>
-                <Link
-                    href="/latest"
-                    className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/latest" ? "font-bold text-black-500" : "text-gray-300"
-                        } hover:text-blue-500 hover:bg-gray-200`}
-                >
-                    Latest
-                </Link>
-                <Link
-                    href="/top"
-                    className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/top" ? "font-bold text-black-500" : "text-gray-300"
-                        } hover:text-blue-500 hover:bg-gray-200`}
-                >
-                    Top
-                </Link>
+        <div className="flex flex-col">
+            <div className="md:px-0 md:p-0 md:mb-2 px-3 p-2 text-[1.125rem] ">
+                <nav className="md:mx-0 sm:flex justify-between items-center ">
+                    <ul className="flex items-center py-[0.25rem] my-[calc(-1 * 0.25rem)]">
+                        <li className="...">
+                            <Link
+                                href="/"
+                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] hover:text-createBorderHover hover:bg-white ${pathname === "/" || pathname === "/home" ? "text-[#090909] font-[700]" : "text-[#575757]" } relative`}
+                            >
+                                Relevant
+                            </Link>
+                        </li>
+                        <li className="...">
+                            <Link
+                                href="#"
+                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] ${pathname === "/latest" ? "text-[#090909] font-[700]" : "text-[#575757]" } relative hover:text-createBorderHover hover:bg-white`}
+                            >
+                                Latest
+                            </Link>
+                        </li>
+                        <li className="...">
+                            <Link
+                                href="#"
+                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] ${pathname === "/top" ? "text-[#090909] font-[700]" : "text-[#575757]" } relative hover:text-createBorderHover hover:bg-white`}
+                            >
+                                Top
+                            </Link>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="...">
                 <Notif
                     category={"Dev Challenge"}
                     title={"Heads up about a new thing"}
@@ -67,7 +75,18 @@ export default function CenterPage({ userData }: Props) {
                     comment={"Happy coding"}
                     userData={userData}
                 />
-                <Notif
+                <PageWithPic
+                    image={userData?.image ?? ""}
+                    user={userData?.name ?? "Admin"}
+                    team={userData?.name ?? "Admnin"}
+                    date={"Sep 5"}
+                    title={"Congrats to the Nylas Challenge Winners!"}
+                    tags={tags}
+                    reactions={5}
+                    comments={3}
+                    record={4}
+                />
+                <Ad
                     category={"Dev Challenge"}
                     title={"Heads up about a new thing"}
                     subtitle={"Look no further"}
@@ -76,6 +95,28 @@ export default function CenterPage({ userData }: Props) {
                     description={"You can do so much more once you create your account. Follow the devs and topics you care about, and keep up-to-date."}
                     comment={"Happy coding"}
                     userData={userData}
+                />
+                <Pages
+                    image={userData?.image ?? ""}
+                    user={userData?.name ?? "Admin"}
+                    team={userData?.name ?? "Admnin"}
+                    date={"Sep 5"}
+                    title={"Congrats to the Nylas Challenge Winners!"}
+                    tags={tags}
+                    reactions={5}
+                    comments={3}
+                    record={4}
+                />
+                <Pages
+                    image={userData?.image ?? ""}
+                    user={userData?.name ?? "Admin"}
+                    team={userData?.name ?? "Admnin"}
+                    date={"Sep 5"}
+                    title={"Congrats to the Nylas Challenge Winners!"}
+                    tags={tags}
+                    reactions={5}
+                    comments={3}
+                    record={4}
                 />
                 <Pages
                     image={userData?.image ?? ""}
