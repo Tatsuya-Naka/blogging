@@ -20,7 +20,7 @@ type CustomeType = {
 export default function PageWithPic({ image, user, team, date, title, tags, reactions, comments, record, url, headImage }: CustomeType) {
     return (
         <div>
-            <div className="bax-border aspect-[650/273] py-0 h-full w-full object-contain rounded-t-[0.375rem] max-h-[calc(90vh - 56px)] overflow-hidden block">
+            <div className="bax-border py-0 h-full w-full object-contain rounded-t-[0.375rem] max-h-[calc(90vh - 56px)] overflow-hidden block">
                 <a href="#" className="aspect-[650/273] object-contain rounded-t-customForCenterPage rounded-r-[0.375rem] max-h-[calc(90vh - 56px)]">
                     {/* <img src="https://media.dev.to/cdn-cgi/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdddprn30evuzl4vss9kn.jpg" width="1000" height="420" className="bg-[#dddddd] bax-border aspect-[650/273] py-0 h-full w-full object-contain max-h-[calc(90vh - 56px)]" alt="Cover image for Squash Your Ruby and Rails Bugs Faster"></img> */}
                     <Image 
