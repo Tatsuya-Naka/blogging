@@ -52,115 +52,9 @@ export default function Main({ userData }: Props) {
         setIsDialogOpen(false);
         router.push("/home");
     };
-    const mutation = trpc.imageRouter.uploadImage.useMutation();
-
-    // useEffect(() => {
-    //     if (!bgImageFile) return;
-
-    //     const uploadImage = async () => {
-    //         const id = userData ? userData.id : "";
-
-    //         try {
-    //             // const imageURL = await mutation.mutateAsync({
-    //             //     file: bgImageFile,
-    //             //     folder: id,
-    //             // });
-    //             const { url, fields } = await mutation.mutateAsync({
-    //                 file: "oijfsejofsd;fjeds;jf;d",
-    //                 folder: id,
-    //             });
-    //             // console.log("Uploaded Image URL: ", imageURL);
-    //             console.log("Uploaded Image URL: ", url);
-    //             // const data = {
-    //             //     ...fields,
-    //             //     'Content-type': bgImageFile,
-    //             //     bgImageFile
-    //             // };
-
-    //             const data = {
-    //                 'Content-type': bgImageFile, // File object or other types
-    //                 bgImageFile,                 // File object for the image
-    //                 Policy: 'some-policy-string', // Assuming this is a string
-    //                 'X-Amz-Signature': 'signature', // Assuming this is a string
-    //             };
-
-    //             // Create FormData object
-    //             const formData = new FormData();
-    //             formData.append('Content-type', data['Content-type']);  // Append file type
-    //             formData.append('bgImageFile', data.bgImageFile);       // Append the file
-    //             formData.append('Policy', data.Policy);                 // Append policy string
-    //             formData.append('X-Amz-Signature', data['X-Amz-Signature']); // Append signature
-
-    //             console.log("Data: ", data);
-
-    //             // const formData = new FormData();
-    //             // for (const name in data) {
-    //             //     formData.append(name, data[name]);
-    //             // }
-
-    //             await fetch(url, {
-    //                 method: "POST",
-    //                 body: formData,
-    //             })
-    //                 .then(response => response.json())
-    //                 .then(data => {
-    //                     console.log('File uploaded successfully:', data);
-    //                 })
-    //                 .catch((error) => {
-    //                     console.error('Error uploading file:', error);
-    //                 });
-
-
-    //             // setBgImageURL(imageURL);
-    //             // const { imageUrl } = await mutateAsync({
-    //             //     file: bgImageFile,
-    //             //     folder: id,
-    //             // });
-
-    //             // console.log("Uploaded Image URL:", imageUrl);
-    //             // setBgImageURL(imageUrl);
-    //         } catch (error) {
-    //             console.error("Error uploading image:", error);
-    //         }
-
-    //         setIsPhotoUploaded(true);
-    //     };
-
-    //     uploadImage();
-    //     // setBgImageURL("iofdjfsfejfoejsdnvdvoieofejdoicidvn");
-
-    //     setIsPhotoUploaded(true);
-    // }, [bgImageFile]);
 
     const uploadFileToS3 = async (file: File, folder: string) => {
         try {
-            // Fetch the pre-signed URL from your API
-            // const response = await fetch('/api/uploadImage', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         file: {
-            //             name: file.name,
-            //             type: file.type,
-            //             size: file.size,
-            //         },
-            //         folder,
-            //     }),
-            // });
-
-            // if (!response.ok) {
-            //     throw new Error('Failed to get signed URL');
-            // }
-
-            // const { uploadUrl } = await response.json();
-
-            // Upload the file to S3 using the pre-signed URL
-            // const {url, fields } : {url: string, fields: any} =  await mutation.mutateAsync({
-            //     file: bgImageFile,
-            //     folder: {userData.id || ""},
-            // });
             const uploadResponse = await fetch(bgImageURL, {
                 method: 'POST',
                 body: file,
@@ -178,52 +72,6 @@ export default function Main({ userData }: Props) {
             console.error('Error uploading file:', error);
         }
     };
-
-    // useEffect(() => {
-    //     // if (!bgImageURL) {
-    //     //     throw new Error("Upload your background image");
-    //     // }
-
-    //     // const uploadImageToS3 = async () => {
-    //     //     try {
-    //     //         const file = bgImageFile;
-    //     //         const folder = userData?.id;
-    //     //         // const response = fetch('/api/uploadImage', {
-    //     //         //     method: 'POST',
-    //     //         //     headers: {
-    //     //         //         'Content-Type': 'application/json',
-    //     //         //     },
-    //     //         //     body: JSON.stringify({
-    //     //         //         folder,
-    //     //         //         fileName: file,
-    //     //         //     }),
-    //     //         // });
-
-    //     //         // const uploadUrl = await response.json();
-
-    //     //         await fetch(bgImageURL, {
-    //     //             method: 'PUT',
-    //     //             body: file,
-    //     //         });
-
-    //     //         console.log("Temporary store your image into AWS S3");
-    //     //     }
-    //     //     catch (err) {
-    //     //         console.log("Error occured during uploading your background image: ", err);
-    //     //     }
-    //     // }
-
-    //     // uploadImageToS3();
-    //     if (bgImageFile && bgImageURL && userData) {
-    //         uploadFileToS3(bgImageFile, userData.id);
-    //         console.log("Temporary uploading image to S3");
-    //     }
-
-    // }, [bgImageURL, bgImageFile, userData])
-
-    // useEffect(() => {
-    //     console.log("ImamgeURL for screen: ", bgImageURL);
-    // }, [bgImageURL])
 
     const handleImageSet = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
