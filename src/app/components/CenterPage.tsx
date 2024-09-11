@@ -9,6 +9,8 @@ import Pages from "./center/Pages";
 import { useEffect } from "react";
 import Ad from "./center/Ad";
 import PageWithPic from "./center/PageWithPic";
+import SampleImage from "./images/simple_b.png";
+import { trpc } from "~/server/utils/trpc";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -26,11 +28,25 @@ export default function CenterPage({ userData }: Props) {
     // const [selectedLink, setSelectedLink] = useState("/home");
     // const selectedLink = "/home";
     const pathname = usePathname();
-    const tags: string[] = ["devchallenge", "nylaschallenge", "ai", "api"];
+    // const tags: string[] = ["devchallenge", "nylaschallenge", "ai", "api"];
+    const { data: topics, refetch: refetchTopics } = trpc.topic.getTopicsAll.useQuery();
 
     useEffect(() => {
         console.log(userData);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        console.log("Topics: ", topics);
+        // console.log("FIrst: ", topics["firstTopic"]);
+    }, [topics]);
+    const firstTopic = topics && topics['firstTopic'];
+    const restOfTopics = topics && topics['restOfTopic'];
+
+    useEffect(() => {
+        console.log("First: ", firstTopic);
+        console.log("Rest: ", restOfTopics);
+    }, [firstTopic, restOfTopics]);
+
     return (
         <div className="flex flex-col">
             <div className="md:px-0 md:p-0 md:mb-2 px-3 p-2 text-[1.125rem] ">
@@ -39,7 +55,7 @@ export default function CenterPage({ userData }: Props) {
                         <li className="...">
                             <Link
                                 href="/"
-                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] hover:text-createBorderHover hover:bg-white ${pathname === "/" || pathname === "/home" ? "text-[#090909] font-[700]" : "text-[#575757]" } relative`}
+                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] hover:text-createBorderHover hover:bg-white ${pathname === "/" || pathname === "/home" ? "text-[#090909] font-[700]" : "text-[#575757]"} relative`}
                             >
                                 Relevant
                             </Link>
@@ -47,7 +63,7 @@ export default function CenterPage({ userData }: Props) {
                         <li className="...">
                             <Link
                                 href="#"
-                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] ${pathname === "/latest" ? "text-[#090909] font-[700]" : "text-[#575757]" } relative hover:text-createBorderHover hover:bg-white`}
+                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] ${pathname === "/latest" ? "text-[#090909] font-[700]" : "text-[#575757]"} relative hover:text-createBorderHover hover:bg-white`}
                             >
                                 Latest
                             </Link>
@@ -55,7 +71,7 @@ export default function CenterPage({ userData }: Props) {
                         <li className="...">
                             <Link
                                 href="#"
-                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] ${pathname === "/top" ? "text-[#090909] font-[700]" : "text-[#575757]" } relative hover:text-createBorderHover hover:bg-white`}
+                                className={`inline-flex py-[0.5rem] px-[0.75rem] rounded-[0.375rem] ${pathname === "/top" ? "text-[#090909] font-[700]" : "text-[#575757]"} relative hover:text-createBorderHover hover:bg-white`}
                             >
                                 Top
                             </Link>
@@ -65,26 +81,30 @@ export default function CenterPage({ userData }: Props) {
             </div>
 
             <div className="...">
-                <Notif
-                    category={"Dev Challenge"}
-                    title={"Heads up about a new thing"}
-                    subtitle={"Look no further"}
-                    image={simpleImage}
-                    link={"https://dev.to/"}
-                    description={"You can do so much more once you create your account. Follow the devs and topics you care about, and keep up-to-date."}
-                    comment={"Happy coding"}
-                    userData={userData}
-                />
+                {!userData &&
+                    <Notif
+                        category={"Dev Challenge"}
+                        title={"Heads up about a new thing"}
+                        subtitle={"Look no further"}
+                        image={simpleImage}
+                        link={"https://dev.to/"}
+                        description={"You can do so much more once you create your account. Follow the devs and topics you care about, and keep up-to-date."}
+                        comment={"Happy coding"}
+                        userData={userData}
+                    />
+                }
                 <PageWithPic
-                    image={userData?.image ?? ""}
-                    user={userData?.name ?? "Admin"}
-                    team={userData?.name ?? "Admnin"}
-                    date={"Sep 5"}
-                    title={"Congrats to the Nylas Challenge Winners!"}
-                    tags={tags}
+                    image={firstTopic?.user.image ?? ""}
+                    user={firstTopic?.user.name ?? "Admin"}
+                    team={firstTopic?.user.name ?? "Admnin"}
+                    date={"Sep 1"}
+                    title={firstTopic?.title ?? ""}
+                    tags={[]}
                     reactions={5}
                     comments={3}
                     record={4}
+                    url={`/topic/${firstTopic?.user.id}/${firstTopic?.id}`}
+                    headImage={SampleImage}
                 />
                 <Ad
                     category={"Dev Challenge"}
@@ -96,39 +116,22 @@ export default function CenterPage({ userData }: Props) {
                     comment={"Happy coding"}
                     userData={userData}
                 />
-                <Pages
-                    image={userData?.image ?? ""}
-                    user={userData?.name ?? "Admin"}
-                    team={userData?.name ?? "Admnin"}
-                    date={"Sep 5"}
-                    title={"Congrats to the Nylas Challenge Winners!"}
-                    tags={tags}
-                    reactions={5}
-                    comments={3}
-                    record={4}
-                />
-                <Pages
-                    image={userData?.image ?? ""}
-                    user={userData?.name ?? "Admin"}
-                    team={userData?.name ?? "Admnin"}
-                    date={"Sep 5"}
-                    title={"Congrats to the Nylas Challenge Winners!"}
-                    tags={tags}
-                    reactions={5}
-                    comments={3}
-                    record={4}
-                />
-                <Pages
-                    image={userData?.image ?? ""}
-                    user={userData?.name ?? "Admin"}
-                    team={userData?.name ?? "Admnin"}
-                    date={"Sep 5"}
-                    title={"Congrats to the Nylas Challenge Winners!"}
-                    tags={tags}
-                    reactions={5}
-                    comments={3}
-                    record={4}
-                />
+                {restOfTopics && restOfTopics.map((restOfTopic) => {
+                    return (
+                        <Pages
+                            image={restOfTopic.user.image ?? ""}
+                            user={restOfTopic.user.name ?? ""}
+                            team={restOfTopic.user.name ?? ""}
+                            date={"Sep 1"}
+                            title={restOfTopic.title ?? ""}
+                            tags={[]}
+                            reactions={5}
+                            comments={3}
+                            record={4}
+                            url={`/topic/${restOfTopic?.user.id}/${restOfTopic?.id}`}
+                        />
+                    )
+                })}
             </div>
 
         </div>

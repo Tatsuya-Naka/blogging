@@ -1,6 +1,7 @@
 import { CiBookmark } from "react-icons/ci";
 import Image from "next/image";
 import { FaRegComment } from "react-icons/fa6";
+import { StaticImageData } from "next/image";
 
 type CustomeType = {
     image: string,
@@ -12,22 +13,31 @@ type CustomeType = {
     reactions: number,
     comments: number,
     record: number,
+    url: string,
+    headImage: StaticImageData;
 };
 
-export default function PageWithPic({ image, user, team, date, title, tags, reactions, comments, record }: CustomeType) {
+export default function PageWithPic({ image, user, team, date, title, tags, reactions, comments, record, url, headImage }: CustomeType) {
     return (
         <div>
             <div className="bax-border aspect-[650/273] py-0 h-full w-full object-contain rounded-t-[0.375rem] max-h-[calc(90vh - 56px)] overflow-hidden block">
                 <a href="#" className="aspect-[650/273] object-contain rounded-t-customForCenterPage rounded-r-[0.375rem] max-h-[calc(90vh - 56px)]">
-                    <img src="https://media.dev.to/cdn-cgi/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdddprn30evuzl4vss9kn.jpg" width="1000" height="420" className="bg-[#dddddd] bax-border aspect-[650/273] py-0 h-full w-full object-contain max-h-[calc(90vh - 56px)]" alt="Cover image for Squash Your Ruby and Rails Bugs Faster"></img>
+                    {/* <img src="https://media.dev.to/cdn-cgi/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdddprn30evuzl4vss9kn.jpg" width="1000" height="420" className="bg-[#dddddd] bax-border aspect-[650/273] py-0 h-full w-full object-contain max-h-[calc(90vh - 56px)]" alt="Cover image for Squash Your Ruby and Rails Bugs Faster"></img> */}
+                    <Image 
+                        src={headImage}
+                        alt={user}
+                        width={1000}
+                        height={420}
+                    />
                 </a>
             </div>
             <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative rounded-b-[0.375rem]">
                 <a
-                    href="#"
+                    href={url}
                     className="pointer-events-none opacity-0 absolute top-0 right-0 bottom-0 left-0 text-createAccountBG "
                 >
-                    How do you raise funds for an open-source project?
+                    {/* How do you raise funds for an open-source project? */}
+                    {title}
                 </a>
                 <div
                     className="box-border block "
@@ -39,28 +49,30 @@ export default function PageWithPic({ image, user, team, date, title, tags, reac
                                     href="#"
                                     className="w-[2rem] h-[2rem] inline-block relative rounded-full bg-leftBoxText overflow-hidden shrink-0"
                                 >
-                                    {/* <Image 
-                                    src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F1672505%2Ffcc02484-f159-4dac-a949-3444807ab84d.png"
-                                    alt="image"
-                                    height={}
-                                /> */}
-                                    <img src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F1672505%2Ffcc02484-f159-4dac-a949-3444807ab84d.png" alt="paul_freeman profile"
+                                    {/* <img src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F1672505%2Ffcc02484-f159-4dac-a949-3444807ab84d.png" alt="paul_freeman profile"
                                         className="rounded-full h-full w-full inline-block align-bottom "
-                                        loading="lazy"></img>
+                                        loading="lazy"></img> */}
+                                        <Image 
+                                            src={image}
+                                            alt={user}
+                                            width={90}
+                                            height={90}
+                                            className="rounded-full h-full w-full inline-block align-bottom"
+                                        />
                                 </a>
                             </div>
 
                             <div className="relative mr-[0.5rem] block text-center ">
                                 <div className="...">
                                     <a className="md:hidden font-[500] text-loginText ">
-                                        Paul
+                                        {user}
                                     </a>
 
                                     <div className="md:inline-block hidden sm:mb-0 relative font-[500] ">
                                         <button
                                             className="text-[0.875rem] p-1 ml-[calc(0.25*-1)] -my-2 bg-transparent hover:bg-buttonHover text-[#3d3d3d] hover:text-[#090909] border-0"
                                         >
-                                            Paul
+                                            {user}
                                         </button>
                                     </div>
                                 </div>
@@ -77,10 +89,10 @@ export default function PageWithPic({ image, user, team, date, title, tags, reac
                             className="md:mb-[0.25rem] text-engineBorderColor text-[1.5rem] "
                         >
                             <a
-                                href="#"
+                                href={url}
                                 className="block hover:text-createBorderHover font-bold text-[1.5rem] "
                             >
-                                How do you raise funds for an open-source project?
+                                {title}
                             </a>
                         </h2>
 

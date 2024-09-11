@@ -2,7 +2,11 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from '@tanstack/react-query';
+// import { uploadImageToS3 } from '~/server/utils/s3';
+import { trpc } from '~/server/utils/trpc';
+
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -21,6 +25,14 @@ export default function Main({ userData }: Props) {
     const [isEdit, setIsEdit] = useState(true);
     const [isDelete, setIsDelete] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
+    const [title, setTitle] = useState("");
+    const tags = "productive";
+    // const [tags, setTags] = useState<string[]>([]);
+    const [bgImageFile, setBgImageFile] = useState<File | null | undefined>(null);
+    const [images, setImages] = useState<File[]>([]);
+    const [description, setDescription] = useState("");
+    const [bgImageURL, setBgImageURL] = useState("");
 
     const handleClickEdit = (e: React.MouseEvent<HTMLDivElement>) => {
         // Custom behavior on click
@@ -40,10 +52,326 @@ export default function Main({ userData }: Props) {
         setIsDialogOpen(false);
         router.push("/home");
     };
+    const mutation = trpc.imageRouter.uploadImage.useMutation();
+
+    // useEffect(() => {
+    //     if (!bgImageFile) return;
+
+    //     const uploadImage = async () => {
+    //         const id = userData ? userData.id : "";
+
+    //         try {
+    //             // const imageURL = await mutation.mutateAsync({
+    //             //     file: bgImageFile,
+    //             //     folder: id,
+    //             // });
+    //             const { url, fields } = await mutation.mutateAsync({
+    //                 file: "oijfsejofsd;fjeds;jf;d",
+    //                 folder: id,
+    //             });
+    //             // console.log("Uploaded Image URL: ", imageURL);
+    //             console.log("Uploaded Image URL: ", url);
+    //             // const data = {
+    //             //     ...fields,
+    //             //     'Content-type': bgImageFile,
+    //             //     bgImageFile
+    //             // };
+
+    //             const data = {
+    //                 'Content-type': bgImageFile, // File object or other types
+    //                 bgImageFile,                 // File object for the image
+    //                 Policy: 'some-policy-string', // Assuming this is a string
+    //                 'X-Amz-Signature': 'signature', // Assuming this is a string
+    //             };
+
+    //             // Create FormData object
+    //             const formData = new FormData();
+    //             formData.append('Content-type', data['Content-type']);  // Append file type
+    //             formData.append('bgImageFile', data.bgImageFile);       // Append the file
+    //             formData.append('Policy', data.Policy);                 // Append policy string
+    //             formData.append('X-Amz-Signature', data['X-Amz-Signature']); // Append signature
+
+    //             console.log("Data: ", data);
+
+    //             // const formData = new FormData();
+    //             // for (const name in data) {
+    //             //     formData.append(name, data[name]);
+    //             // }
+
+    //             await fetch(url, {
+    //                 method: "POST",
+    //                 body: formData,
+    //             })
+    //                 .then(response => response.json())
+    //                 .then(data => {
+    //                     console.log('File uploaded successfully:', data);
+    //                 })
+    //                 .catch((error) => {
+    //                     console.error('Error uploading file:', error);
+    //                 });
+
+
+    //             // setBgImageURL(imageURL);
+    //             // const { imageUrl } = await mutateAsync({
+    //             //     file: bgImageFile,
+    //             //     folder: id,
+    //             // });
+
+    //             // console.log("Uploaded Image URL:", imageUrl);
+    //             // setBgImageURL(imageUrl);
+    //         } catch (error) {
+    //             console.error("Error uploading image:", error);
+    //         }
+
+    //         setIsPhotoUploaded(true);
+    //     };
+
+    //     uploadImage();
+    //     // setBgImageURL("iofdjfsfejfoejsdnvdvoieofejdoicidvn");
+
+    //     setIsPhotoUploaded(true);
+    // }, [bgImageFile]);
+
+    const uploadFileToS3 = async (file: File, folder: string) => {
+        try {
+            // Fetch the pre-signed URL from your API
+            // const response = await fetch('/api/uploadImage', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         file: {
+            //             name: file.name,
+            //             type: file.type,
+            //             size: file.size,
+            //         },
+            //         folder,
+            //     }),
+            // });
+
+            // if (!response.ok) {
+            //     throw new Error('Failed to get signed URL');
+            // }
+
+            // const { uploadUrl } = await response.json();
+
+            // Upload the file to S3 using the pre-signed URL
+            // const {url, fields } : {url: string, fields: any} =  await mutation.mutateAsync({
+            //     file: bgImageFile,
+            //     folder: {userData.id || ""},
+            // });
+            const uploadResponse = await fetch(bgImageURL, {
+                method: 'POST',
+                body: file,
+                headers: {
+                    'Content-Type': file.type, // Optional: Set content type
+                },
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Failed to upload file');
+            }
+
+            console.log('File uploaded successfully');
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+
+    // useEffect(() => {
+    //     // if (!bgImageURL) {
+    //     //     throw new Error("Upload your background image");
+    //     // }
+
+    //     // const uploadImageToS3 = async () => {
+    //     //     try {
+    //     //         const file = bgImageFile;
+    //     //         const folder = userData?.id;
+    //     //         // const response = fetch('/api/uploadImage', {
+    //     //         //     method: 'POST',
+    //     //         //     headers: {
+    //     //         //         'Content-Type': 'application/json',
+    //     //         //     },
+    //     //         //     body: JSON.stringify({
+    //     //         //         folder,
+    //     //         //         fileName: file,
+    //     //         //     }),
+    //     //         // });
+
+    //     //         // const uploadUrl = await response.json();
+
+    //     //         await fetch(bgImageURL, {
+    //     //             method: 'PUT',
+    //     //             body: file,
+    //     //         });
+
+    //     //         console.log("Temporary store your image into AWS S3");
+    //     //     }
+    //     //     catch (err) {
+    //     //         console.log("Error occured during uploading your background image: ", err);
+    //     //     }
+    //     // }
+
+    //     // uploadImageToS3();
+    //     if (bgImageFile && bgImageURL && userData) {
+    //         uploadFileToS3(bgImageFile, userData.id);
+    //         console.log("Temporary uploading image to S3");
+    //     }
+
+    // }, [bgImageURL, bgImageFile, userData])
+
+    // useEffect(() => {
+    //     console.log("ImamgeURL for screen: ", bgImageURL);
+    // }, [bgImageURL])
+
+    const handleImageSet = async (e: React.FormEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        setBgImageFile(e.currentTarget.files?.[0]);
+    }
+
+    const handleRemove = async (e: React.FormEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setBgImageFile(null);
+        setIsPhotoUploaded(false);
+    }
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.preventDefault();
+        setTitle(e.target.value);
+    }
+
+    const topicMutate = trpc.topic.create.useMutation();
+
+    const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!bgImageFile) return;
+        const topic  = await topicMutate.mutateAsync({
+            title: title,
+            description: description,
+            bgimages: bgImageURL,
+        });
+        console.log("topic content: ", topic);
+        const userId = userData?.id;
+        const postId = topic.id;
+        router.push(`/topic/${userId}/${postId}`);
+    }
+
+    const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.preventDefault();
+        setDescription(e.target.value);
+    }
+
+    const demoMutation = trpc.demo.uploadImage.useMutation();
+    const { data: bgImages, refetch: refetchImage } = trpc.demo.getImage.useQuery();
+
+    useEffect(() => {
+        if (!bgImageFile) return;
+        setIsPhotoUploaded(true);
+        const uploadImage = async () => {
+            // const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
+            const {url} : {url: string} = await demoMutation.mutateAsync({type: bgImageFile.type});
+
+            await fetch(url, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': bgImageFile.type,
+                },
+                body: bgImageFile
+            });
+
+            const imageURL = url.split('?')[0];
+
+            // console.log("Fields: ", fields);
+
+            // const data = {
+            //     ...fields,
+            //     'Content-Type': bgImageFile.type,
+            //     bgImageFile
+            // };
+            // console.log("After: ", data);
+
+            // const formData = new FormData();
+
+            // for (const name in data) {
+            //     formData.append(name, data[name]);
+            // }
+
+            // console.log("Form data: ", formData);
+
+            // await fetch(url, {
+            //     method: 'POST',
+            //     body: formData,
+            // });
+            // const response = await fetch(url, {
+            //     method: 'POST',
+            //     body: formData,
+            // });
+        
+            // if (!response.ok) {
+            //     // Handle HTTP errors (non-2xx status codes)
+            //     const errorText = await response.text();
+            //     throw new Error(`HTTP error! Status: ${response.status}. ${errorText}`);
+            // }
+        
+            // // Optionally handle successful response
+            // const result = await response.json();
+            // console.log('Success:', result);
+            console.log("URL: ", url);
+            console.log("Image URL: ", imageURL);
+            setBgImageURL(imageURL ? imageURL : "");
+        }
+        uploadImage();
+        // const uploadImage = async () => {
+        //     const { url }: { url: string } = await demoMutation.mutateAsync();
+
+        //     await fetch(url, {
+        //         method: 'PUT',
+        //         body: bgImageFile, // Send the file directly as the body
+        //         headers: {
+        //             'Content-Type': bgImageFile.type // Ensure correct content type
+        //         },
+        //     });
+
+        //     console.log("Image successfully uploaded to ", url);
+        // };
+
+        // uploadImage();
+        console.log("Upload...");
+        refetchImage();
+    }, [bgImageFile])
+
+    // const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     if (!bgImageFile) return;
+    //     const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
+    //     console.log("Fields: ", fields);
+    //     const data = {
+    //         ...fields,
+    //         'Content-Type': bgImageFile.type,
+    //         bgImageFile
+    //     };
+    //     console.log("After: ", data);
+
+    //     const formData = new FormData();
+
+    //     for (const name in data) {
+    //         formData.append(name, data[name]);
+    //     }
+
+    //     await fetch(url, {
+    //         method: 'POST',
+    //         body: formData,
+    //     });
+    //     console.log("URL: ", url);
+
+    // };
 
     return (
         <main className="scroll-mt-[56px] block box-border bg-bg">
-            <form className="md:grid grid-cols-[64px_7fr_3fr] max-w-[1380px] px-[1rem] h-[100vh] gap-x-[1rem] mx-auto text-[1rem] ">
+            <form className="md:grid grid-cols-[64px_7fr_3fr] max-w-[1380px] px-[1rem] h-[100vh] gap-x-[1rem] mx-auto text-[1rem] "
+                onSubmit={uploadPost}
+            >
                 <div className="lg:col-start-1 md:col-span-2 lg:col-end-3 box-border md:p-0 flex items-center h-[56px] px-[0.5rem] ">
                     <span className="sm:mr-[1rem] mr-[0.25rem] md:block hidden ">
                         <a href="/home" className="lg:max-w-[200px] lg:text-[1.25rem] md:max-w-[175px] md:text-[1.125rem] md:font-[700] sm:max-w-[150px] inline-flex shrink-0 align-middle items-center text-[#090909] tracking-[-0.02em] leading-[1] ">
@@ -84,22 +412,60 @@ export default function Main({ userData }: Props) {
                 <div className="rounded-customForCenterPage bg-white text-engineBorderColor shadow-custom-light-border lg:col-start-2 lg:col-end-2 md:col-span-2 overflow-y-auto h-[calc(100vh-144px)] flex flex-col box-border">
                     <div className="px-[4rem] py-[2rem] rounded-t-[0.375rem] rounded-b-none">
                         <div className="sm:flex-row flex sm:items-center sm:mb-[1.25rem] mb-[1rem] items-start flex-col ">
-                            <div className="flex items-center ">
-                                <label className="bg-transparent hover:bg-buttonHover border-[#d6d6d7] hover:border-[#a3a3a3] text-[#3d3d3d] hover:text-[#090909] border-[2px] py-1.5 px-3.5 rounded-[0.375rem] leading-[1.5rem] border-[2px] border-solid shadow-custom-light-border text-[1rem] relative inline-block ">
-                                    Add a cover image
-                                    <input className="absolute left-[-10000px] top-auto w-[1px] h-[1px] leading-[1.5] " style={{ fontSize: "100%" }}>
-                                    </input>
-                                    {/* <span className="min-w-[190px] sm:text-[0.75rem] sm:px-[0.5rem] sm:py-[0.25rem] absolute bg-engineBorderColor text-white font-[400] leading-[1.25] px-[0.75rem] py-[0.5rem] z-[500] rounded-[0.375rem] w-auto opacity-1" style={{ left: "50%", top: "100%" }}>
+                            {isPhotoUploaded ?
+                                <>
+                                    {bgImages && bgImages.map((bgImage) => {
+                                        <img
+                                            className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
+                                            src={bgImage.id}
+                                        />
+                                    })}
+                                    {/* <img
+                                        className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
+                                        src={bgImageURL}
+                                    /> */}
+
+                                    <div className="flex items-center">
+                                        <label className="bg-transparent hover:bg-buttonHover border-[#d6d6d7] hover:border-[#a3a3a3] text-[#3d3d3d] hover:text-[#090909] py-1.5 px-3.5 rounded-[0.375rem] leading-[1.5rem] border-[2px] border-solid shadow-custom-light-border text-[1rem] relative inline-block  ">
+                                            Change
+                                            <input
+                                                className="absolute left-[-10000px] top-auto w-[1px] h-[1px] leading-[1.5] " style={{ fontSize: "100%" }}
+                                                onChange={handleImageSet} type="file"
+                                            />
+                                        </label>
+
+                                        <button
+                                            className="bg-transparent hover:bg-buttonHover text-removeText hover:text-removeHoverText border-0 py-1.5 px-3.5 rounded-[0.375rem] leading-[1.5rem] text-[1rem] font-[500] border-solid "
+                                            onClick={handleRemove}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                </>
+
+                                :
+                                <div className="flex items-center ">
+                                    <label className="bg-transparent hover:bg-buttonHover border-[#d6d6d7] hover:border-[#a3a3a3] text-[#3d3d3d] hover:text-[#090909] border-[2px] py-1.5 px-3.5 rounded-[0.375rem] leading-[1.5rem] border-[2px] border-solid shadow-custom-light-border text-[1rem] relative inline-block ">
+                                        Add a cover image
+                                        <input className="absolute left-[-10000px] top-auto w-[1px] h-[1px] leading-[1.5] " style={{ fontSize: "100%" }}
+                                            onChange={handleImageSet} type="file"
+                                        >
+                                        </input>
+                                        {/* <span className="min-w-[190px] sm:text-[0.75rem] sm:px-[0.5rem] sm:py-[0.25rem] absolute bg-engineBorderColor text-white font-[400] leading-[1.25] px-[0.75rem] py-[0.5rem] z-[500] rounded-[0.375rem] w-auto opacity-1" style={{ left: "50%", top: "100%" }}>
                                                     Use a ratio of 1000:420 for best results.
                                                 </span> */}
-                                </label>
-                            </div>
+                                    </label>
+                                </div>
+                            }
+
                         </div>
 
+                        {/* Title */}
                         <div className="mb-[0.5rem] relative box-border ">
                             <textarea
                                 className="min-h-[60px] bprder-none resize-none outline-none w-full h-full max-h-[60px] whitespace-pre-wrap lg:text-[3rem] md:text-[2.25rem] sm:font-[800] font-[700] leading-[1.25] text-[1.875rem] bg-transparent p-0 m-0 w-full"
                                 placeholder="New post title here..."
+                                onChange={handleTitleChange}
                             />
                         </div>
 
@@ -110,6 +476,8 @@ export default function Main({ userData }: Props) {
                                         <input
                                             className="text-engineBorderColor border-none leading-[1.5] "
                                             placeholder="Add up to 4 tags..."
+                                            // onChange={handleTags} type="text"
+                                            type="text"
                                         >
                                         </input>
                                     </li>
@@ -220,7 +588,7 @@ export default function Main({ userData }: Props) {
                                 <button
                                     className="ml-auto p-[0.5rem] bg-transparent hover:bg-logInBg text-editColor hover:text-loginHover relative inline-block rounded-[0.375rem] text-center "
                                 >
-                                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" className="align-bottom"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 17a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm0-7a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm2-5a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"></path></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" className="align-bottom"><path fillRule="evenodd" clipRule="evenodd" d="M12 17a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm0-7a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm2-5a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"></path></svg>
                                     {/* <span className="absolute bg-engineBorderColor text-white text-[0.875rem] font-[400] leading-[1.25] z-[500] rounded-[0.375rem] w-full " style={{ left: "50%", top: "100%" }}>
                                                     Upload image
                                                     <span className="opacity-75 ">
@@ -235,6 +603,7 @@ export default function Main({ userData }: Props) {
                             <textarea
                                 className="min-h-[27px] resize-none outline-none border-none w-full h-full text-[1.125rem] bg-transparent w-full leading-[1.5] text-engineBorderColor"
                                 placeholder="Write your post content here..."
+                                onChange={handleDescription}
                             />
                         </div>
                     </div>
@@ -309,7 +678,9 @@ export default function Main({ userData }: Props) {
                 }
 
                 <div className="lg:col-start-2 md:col-span-2 lg:col-end-2 md:p-0 h-[88px] flex items-center relative ">
-                    <button className="mr-2 bg-createAccountBG hover:bg-loginHover text-white hover:text-white font-[500] relative inline-block py-[0.5rem] px-[1rem] rounded-[0.375rem] text-center border-none">
+                    <button className="mr-2 bg-createAccountBG hover:bg-loginHover text-white hover:text-white font-[500] relative inline-block py-[0.5rem] px-[1rem] rounded-[0.375rem] text-center border-none"
+                        type="submit"
+                    >
                         Publish
                     </button>
 

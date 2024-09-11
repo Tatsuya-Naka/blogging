@@ -26,6 +26,9 @@ const config: Config = {
         buttonHover: "rgba(0, 0, 0, 0.035)",
         sidebarfooter: "rgb(115, 115, 115)",
         tagBg: "rgba(113, 234, 139, 0.10)",
+        removeText: "rgb(220, 38, 38)",
+        removeHoverText: "rgb(185, 28, 28)",
+        topicEdit: "rgba(245, 158, 11, 0.1)",
       },
       appearance: {
         none: 'none',
@@ -52,6 +55,7 @@ const config: Config = {
       boxShadow: {
         'custom-light-border': '0 0 0 1px rgba(23, 23, 23, 0.05)',
         'customForCenterPage': "0px 8px 16px rgba(0, 0, 0, 0.06)",
+        'topicShadow': "0 -1px 5px rgba(0, 0, 0, 0.2);", 
       },
       borderRadius: {
         'custom': 'max(0px, min(0.375rem, calc((100vw - 4px - 100%) * 9999)))',

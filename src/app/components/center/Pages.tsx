@@ -12,16 +12,18 @@ type CustomeType = {
     reactions: number,
     comments: number,
     record: number,
+    url: string,
 };
 
-export default function Pages({ image, user, team, date, title, tags, reactions, comments, record }: CustomeType) {
+export default function Pages({ image, user, team, date, title, tags, reactions, comments, record, url }: CustomeType) {
     return (
         <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative rounded-customForCenterPage">
             <a
-                href="#"
+                href={url}
                 className="pointer-events-none opacity-0 absolute top-0 right-0 bottom-0 left-0 text-createAccountBG "
             >
-                How do you raise funds for an open-source project?
+                {/* How do you raise funds for an open-source project? */}
+                {title}
             </a>
             <div
                 className="box-border block "
@@ -38,29 +40,36 @@ export default function Pages({ image, user, team, date, title, tags, reactions,
                                     alt="image"
                                     height={}
                                 /> */}
-                                <img src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F1672505%2Ffcc02484-f159-4dac-a949-3444807ab84d.png" alt="paul_freeman profile"
+                                {/* <img src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F1672505%2Ffcc02484-f159-4dac-a949-3444807ab84d.png" alt="paul_freeman profile"
                                     className="rounded-full h-full w-full inline-block align-bottom "
-                                    loading="lazy"></img>
+                                    loading="lazy"></img> */}
+                                    <Image 
+                                        src={image}
+                                        alt={user}
+                                        width={90}
+                                        height={90}
+                                        className="rounded-full h-full w-full inline-block align-bottom"
+                                    />
                             </a>
                         </div>
 
                         <div className="relative mr-[0.5rem] block text-center ">
                             <div className="...">
                                 <a className="md:hidden font-[500] text-loginText ">
-                                    Paul
+                                    {user}
                                 </a>
 
                                 <div className="md:inline-block hidden sm:mb-0 relative font-[500] ">
                                     <button
                                         className="text-[0.875rem] p-1 ml-[calc(0.25*-1)] -my-2 bg-transparent hover:bg-buttonHover text-[#3d3d3d] hover:text-[#090909] border-0"
                                     >
-                                        Paul
+                                        {user}
                                     </button>
                                 </div>
                             </div>
 
                             <a className="text-[0.75rem] text-leftBoxText ">
-                                <p>Sep 7</p>
+                                <p>{date}</p>
                             </a>
                         </div>
                     </div>
@@ -71,10 +80,10 @@ export default function Pages({ image, user, team, date, title, tags, reactions,
                         className="md:mb-[0.25rem] text-engineBorderColor text-[1.5rem] "
                     >
                         <a
-                            href="#"
+                            href={url}
                             className="block hover:text-createBorderHover font-bold text-[1.5rem] "
                         >
-                            How do you raise funds for an open-source project?
+                            {title}
                         </a>
                     </h2>
 

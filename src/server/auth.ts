@@ -11,6 +11,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 import { env } from "~/env";
 import { db } from "~/server/db";
+import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient;
 
@@ -64,6 +65,10 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_ID,
     }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    })
     // CredentialsProvider({
     //   name: 'Sign in',
     //   credentials: {
