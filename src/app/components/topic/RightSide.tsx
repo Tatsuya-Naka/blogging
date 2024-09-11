@@ -18,8 +18,8 @@ interface Props {
 export default function TopicRight({ userData }: Props) {
     const pathname = usePathname();
 
-    const userId = pathname.split('/')[2] || '';
-    const topicId = pathname.split('/')[3] || '';
+    const userId = pathname.split('/')[2] ?? '';
+    const topicId = pathname.split('/')[3] ?? '';
 
 
     useEffect(() => {

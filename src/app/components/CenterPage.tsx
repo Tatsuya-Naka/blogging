@@ -24,9 +24,6 @@ interface Props {
 };
 
 export default function CenterPage({ userData }: Props) {
-    // const userData = await getServerAuthuserData();
-    // const [selectedLink, setSelectedLink] = useState("/home");
-    // const selectedLink = "/home";
     const pathname = usePathname();
     // const tags: string[] = ["devchallenge", "nylaschallenge", "ai", "api"];
     const { data: topics, refetch: refetchTopics } = trpc.topic.getTopicsAll.useQuery();
@@ -39,8 +36,8 @@ export default function CenterPage({ userData }: Props) {
         console.log("Topics: ", topics);
         // console.log("FIrst: ", topics["firstTopic"]);
     }, [topics]);
-    const firstTopic = topics && topics['firstTopic'];
-    const restOfTopics = topics && topics['restOfTopic'];
+    const firstTopic = topics && topics.firstTopic;
+    const restOfTopics = topics && topics.restOfTopic;
 
     useEffect(() => {
         console.log("First: ", firstTopic);

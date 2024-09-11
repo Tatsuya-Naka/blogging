@@ -338,7 +338,7 @@ export default function Main({ userData }: Props) {
 
         // uploadImage();
         console.log("Upload...");
-        refetchImage();
+        // refetchImage();
     }, [bgImageFile])
 
     // const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {

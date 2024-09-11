@@ -25,8 +25,8 @@ export default function TopicCenter({ userData }: Props) {
     const pathname = usePathname();
     const tags: string[] = ["devchallenge", "nylaschallenge", "ai", "api"];
     const imageData = ImageSample;
-    const userId = pathname.split('/')[2] || '';
-    const topicId = pathname.split('/')[3] || '';
+    const userId = pathname.split('/')[2] ?? '';
+    const topicId = pathname.split('/')[3] ?? '';
 
 
     useEffect(() => {
