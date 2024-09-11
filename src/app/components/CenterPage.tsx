@@ -113,7 +113,7 @@ export default function CenterPage({ userData }: Props) {
                     comment={"Happy coding"}
                     userData={userData}
                 />
-                {restOfTopics && restOfTopics.map((restOfTopic) => {
+                {restOfTopics?.map((restOfTopic) => {
                     return (
                         <Pages
                             key={restOfTopic?.id}

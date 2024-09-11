@@ -138,7 +138,7 @@ export default function Main({ userData }: Props) {
                 console.error("Error uploading the image: ", err);
             }
         }
-        uploadImage();
+        void uploadImage();
         console.log("Upload...");
         // refetchImage();
     }, [bgImageFile])
@@ -216,7 +216,7 @@ export default function Main({ userData }: Props) {
                         <div className="sm:flex-row flex sm:items-center sm:mb-[1.25rem] mb-[1rem] items-start flex-col ">
                             {isPhotoUploaded ?
                                 <>
-                                    {bgImages && bgImages?.map((bgImage) => {
+                                    {bgImages?.map((bgImage) => {
                                         <img
                                             className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
                                             src={bgImage.id}
