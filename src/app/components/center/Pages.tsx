@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FaRegComment } from "react-icons/fa6";
 
 type CustomeType = {
+    key: string
     image: string,
     user: string,
     team: string,
@@ -15,7 +16,7 @@ type CustomeType = {
     url: string,
 };
 
-export default function Pages({ image, user, team, date, title, tags, reactions, comments, record, url }: CustomeType) {
+export default function Pages({ key, image, user, team, date, title, tags, reactions, comments, record, url }: CustomeType) {
     return (
         <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative rounded-customForCenterPage">
             <a

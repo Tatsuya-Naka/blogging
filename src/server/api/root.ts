@@ -1,6 +1,6 @@
 import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { imageRouter } from "./routers/image";
+// import { imageRouter } from "./routers/image";
 import { topicRouter } from "./routers/topics";
 import { demoRouter } from "./routers/demo";
 
@@ -11,7 +11,7 @@ import { demoRouter } from "./routers/demo";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
-  imageRouter,
+  // imageRouter,
   topic: topicRouter,
   demo: demoRouter,
 });

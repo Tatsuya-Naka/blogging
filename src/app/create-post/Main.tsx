@@ -246,7 +246,7 @@ export default function Main({ userData }: Props) {
     const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!bgImageFile) return;
-        const topic  = await topicMutate.mutateAsync({
+        const topic = await topicMutate.mutateAsync({
             title: title,
             description: description,
             bgimages: bgImageURL,
@@ -269,74 +269,28 @@ export default function Main({ userData }: Props) {
         if (!bgImageFile) return;
         setIsPhotoUploaded(true);
         const uploadImage = async () => {
-            // const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
-            const {url} : {url: string} = await demoMutation.mutateAsync({type: bgImageFile.type});
+            try {
+                // const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
+                const { url }: { url: string } = await demoMutation.mutateAsync({ type: bgImageFile.type });
 
-            await fetch(url, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': bgImageFile.type,
-                },
-                body: bgImageFile
-            });
+                await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': bgImageFile.type,
+                    },
+                    body: bgImageFile
+                });
 
-            const imageURL = url.split('?')[0];
+                const imageURL = url.split('?')[0];
 
-            // console.log("Fields: ", fields);
-
-            // const data = {
-            //     ...fields,
-            //     'Content-Type': bgImageFile.type,
-            //     bgImageFile
-            // };
-            // console.log("After: ", data);
-
-            // const formData = new FormData();
-
-            // for (const name in data) {
-            //     formData.append(name, data[name]);
-            // }
-
-            // console.log("Form data: ", formData);
-
-            // await fetch(url, {
-            //     method: 'POST',
-            //     body: formData,
-            // });
-            // const response = await fetch(url, {
-            //     method: 'POST',
-            //     body: formData,
-            // });
-        
-            // if (!response.ok) {
-            //     // Handle HTTP errors (non-2xx status codes)
-            //     const errorText = await response.text();
-            //     throw new Error(`HTTP error! Status: ${response.status}. ${errorText}`);
-            // }
-        
-            // // Optionally handle successful response
-            // const result = await response.json();
-            // console.log('Success:', result);
-            console.log("URL: ", url);
-            console.log("Image URL: ", imageURL);
-            setBgImageURL(imageURL ? imageURL : "");
+                console.log("URL: ", url);
+                console.log("Image URL: ", imageURL);
+                setBgImageURL(imageURL ? imageURL : "");
+            } catch (err) {
+                console.error("Error uploading the image: ", err);
+            }
         }
         uploadImage();
-        // const uploadImage = async () => {
-        //     const { url }: { url: string } = await demoMutation.mutateAsync();
-
-        //     await fetch(url, {
-        //         method: 'PUT',
-        //         body: bgImageFile, // Send the file directly as the body
-        //         headers: {
-        //             'Content-Type': bgImageFile.type // Ensure correct content type
-        //         },
-        //     });
-
-        //     console.log("Image successfully uploaded to ", url);
-        // };
-
-        // uploadImage();
         console.log("Upload...");
         // refetchImage();
     }, [bgImageFile])
@@ -414,7 +368,7 @@ export default function Main({ userData }: Props) {
                         <div className="sm:flex-row flex sm:items-center sm:mb-[1.25rem] mb-[1rem] items-start flex-col ">
                             {isPhotoUploaded ?
                                 <>
-                                    {bgImages && bgImages.map((bgImage) => {
+                                    {bgImages && bgImages?.map((bgImage) => {
                                         <img
                                             className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
                                             src={bgImage.id}

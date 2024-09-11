@@ -36,8 +36,8 @@ export default function CenterPage({ userData }: Props) {
         console.log("Topics: ", topics);
         // console.log("FIrst: ", topics["firstTopic"]);
     }, [topics]);
-    const firstTopic = topics && topics.firstTopic;
-    const restOfTopics = topics && topics.restOfTopic;
+    const firstTopic = topics?.firstTopic;
+    const restOfTopics = topics?.restOfTopic;
 
     useEffect(() => {
         console.log("First: ", firstTopic);
@@ -116,6 +116,7 @@ export default function CenterPage({ userData }: Props) {
                 {restOfTopics && restOfTopics.map((restOfTopic) => {
                     return (
                         <Pages
+                            key={restOfTopic?.id}
                             image={restOfTopic.user.image ?? ""}
                             user={restOfTopic.user.name ?? ""}
                             team={restOfTopic.user.name ?? ""}
