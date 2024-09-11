@@ -77,7 +77,7 @@ export default function TopicCenter({ userData }: Props) {
                                     >
                                         Edit
                                     </a>
-                                    <a href="#"
+                                    <a href={`/edit/delete/${userId}/${topicId}`}
                                         className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
                                     >
                                         Manage

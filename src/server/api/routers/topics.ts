@@ -6,6 +6,18 @@ import {
 } from "~/server/api/trpc";
 
 export const topicRouter = createTRPCRouter({
+    deleteTopic: publicProcedure
+        .input(z.object({
+            topicId: z.string(),
+        }))
+        .mutation(async({ctx, input}) => {
+            return await ctx.db.topic.delete({
+                where: {
+                    id: input.topicId,
+                }
+            })
+        }),
+
     getTopicsAll: publicProcedure
         .query(async({ctx}) => {
             const topics = await ctx.db.topic.findMany({
