@@ -147,7 +147,9 @@ export default function SearchResult({ userData }: Props) {
                         {result?.map((result) => {
                             return (
                                 <Pages
+                                    userData={userData}
                                     key={result?.id}
+                                    userId={result.user.id}
                                     image={result.user.image ?? ""}
                                     user={result.user.name ?? ""}
                                     team={result.user.name ?? ""}
@@ -158,6 +160,7 @@ export default function SearchResult({ userData }: Props) {
                                     comments={3}
                                     record={4}
                                     url={`/topic/${result?.user.id}/${result?.id}`}
+                                    bio={"Thank you"}
                                 />
                             )
                         })}

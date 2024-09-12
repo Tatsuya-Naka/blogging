@@ -97,7 +97,7 @@ export default function SideBar({ userData, isSideBar, setIsSideBar }: Props ) {
                                         Home
                                     </a>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <a
                                         href="/"
                                         className="bg-transparent hover:bg-logInBg textloginText hover:text-loginHover flex py-[0.5rem] px-[1rem] relative rounded-[0.375rem] w-full items-center"
@@ -432,7 +432,7 @@ export default function SideBar({ userData, isSideBar, setIsSideBar }: Props ) {
                                         </span>
                                         Home
                                     </a>
-                                </li>
+                                </li> */}
                             </ul>
                         </nav>
 
@@ -443,7 +443,7 @@ export default function SideBar({ userData, isSideBar, setIsSideBar }: Props ) {
                                 Other
                             </h2>
                             <ul className="m-0 p-0">
-                                <li
+                                {/* <li
                                 >
                                     <Link
                                         href="/home"
@@ -499,7 +499,7 @@ export default function SideBar({ userData, isSideBar, setIsSideBar }: Props ) {
                                         </span>
                                         Code of Conduct
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
                         </nav>
 

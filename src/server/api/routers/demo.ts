@@ -24,6 +24,20 @@ interface ImageMetaData extends Post {
 };
 
 export const demoRouter = createTRPCRouter({
+    getUserInfo: publicProcedure
+        .input(z.object({
+            userId: z.string(),
+        }))
+        .query(async({ctx, input}) => {
+            const result = await ctx.db.user.findFirst({
+                where: {
+                    id: input.userId,
+                }
+            });
+
+            return result;
+        }),
+
     getImage: protectedProcedure
         .query(async ({ ctx }) => {
             const userId = ctx.session.user.id;

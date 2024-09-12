@@ -1,10 +1,21 @@
 import { CiBookmark } from "react-icons/ci";
 import Image from "next/image";
 import { FaRegComment } from "react-icons/fa6";
+import PopupProfile from "../profile/PopupProfile";
+import { useState, useEffect, useRef } from "react";
 
-type CustomeType = {
-    key: string
-    image: string,
+type CustomType = {
+    name?: string | null;    // Allow string, null, or undefined
+    email?: string | null;   // Allow string, null, or undefined
+    id: string;              // Keep this as string since it's required
+    image?: string | null;   // Allow string, null, or undefined
+};
+
+interface Props {
+    userData?: CustomType;
+    key: string;
+    userId: string;
+    image: string;
     user: string,
     team: string,
     date: string,
@@ -14,9 +25,35 @@ type CustomeType = {
     comments: number,
     record: number,
     url: string,
+    bio: string;
 };
 
-export default function Pages({ key, image, user, team, date, title, tags, reactions, comments, record, url }: CustomeType) {
+export default function Pages({ userData, key, userId, image, user, team, date, title, tags, reactions, comments, record, url, bio }: Props) {
+    const [popupProfile, setPopupProfile] = useState(false);
+    const popupRef = useRef<HTMLDivElement>(null);  // Reference for popup
+
+    const handlePopupProfile = () => {
+        setPopupProfile(true);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+            setPopupProfile(false);
+        }
+        console.log(popupRef);
+        // setPopupProfile(false);
+    };
+
+    useEffect(() => {
+        if (popupProfile) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [popupProfile]);
 
     return (
         <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative md:rounded-customForCenterPage">
@@ -45,28 +82,34 @@ export default function Pages({ key, image, user, team, date, title, tags, react
                                 {/* <img src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F1672505%2Ffcc02484-f159-4dac-a949-3444807ab84d.png" alt="paul_freeman profile"
                                     className="rounded-full h-full w-full inline-block align-bottom "
                                     loading="lazy"></img> */}
-                                    <Image 
-                                        src={image}
-                                        alt={user}
-                                        width={90}
-                                        height={90}
-                                        className="rounded-full h-full w-full inline-block align-bottom"
-                                    />
+                                <Image
+                                    src={image}
+                                    alt={user}
+                                    width={90}
+                                    height={90}
+                                    className="rounded-full h-full w-full inline-block align-bottom"
+                                />
                             </a>
                         </div>
 
                         <div className="relative mr-[0.5rem] block">
                             <div className="...">
-                                <a className="md:hidden font-[500] text-loginText p-1">
+                                <a className="md:hidden font-[500] text-loginText p-1" href={`/user/${userId}`}>
                                     {user}
                                 </a>
 
                                 <div className="md:inline-block hidden sm:mb-0 relative font-[500] ">
                                     <button
                                         className="text-[0.875rem] p-1 ml-[calc(0.25*-1)] -my-2 bg-transparent hover:bg-buttonHover text-[#3d3d3d] hover:text-[#090909] border-0"
+                                        onClick={handlePopupProfile}
                                     >
                                         {user}
                                     </button>
+                                    {popupProfile &&
+                                        <div ref={popupRef}>
+                                            <PopupProfile userData={userData} userId={userId} image={image} userName={user} bio={bio} />
+                                        </div>
+                                    }
                                 </div>
                             </div>
 

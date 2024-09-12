@@ -91,6 +91,8 @@ export default function CenterPage({ userData }: Props) {
                     />
                 }
                 <PageWithPic
+                    userData={userData}
+                    userId={firstTopic?.user.id ?? ""}
                     image={firstTopic?.user.image ?? ""}
                     user={firstTopic?.user.name ?? "Admin"}
                     team={firstTopic?.user.name ?? "Admnin"}
@@ -102,6 +104,7 @@ export default function CenterPage({ userData }: Props) {
                     record={4}
                     url={`/topic/${firstTopic?.user.id}/${firstTopic?.id}`}
                     headImage={SampleImage}
+                    bio={"Thank you"}
                 />
                 <Ad
                     category={"Dev Challenge"}
@@ -116,7 +119,9 @@ export default function CenterPage({ userData }: Props) {
                 {restOfTopics?.map((restOfTopic) => {
                     return (
                         <Pages
+                            userData={userData}
                             key={restOfTopic?.id}
+                            userId={restOfTopic.user.id}
                             image={restOfTopic.user.image ?? ""}
                             user={restOfTopic.user.name ?? ""}
                             team={restOfTopic.user.name ?? ""}
@@ -127,6 +132,7 @@ export default function CenterPage({ userData }: Props) {
                             comments={3}
                             record={4}
                             url={`/topic/${restOfTopic?.user.id}/${restOfTopic?.id}`}
+                            bio={"Thank you"}
                         />
                     )
                 })}

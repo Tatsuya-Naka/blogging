@@ -6,6 +6,23 @@ import {
 } from "~/server/api/trpc";
 
 export const topicRouter = createTRPCRouter({
+    getAccountProfile: publicProcedure
+        .input(z.object({
+            userId: z.string(),
+        }))
+        .query(async({ctx, input}) => {
+            const result = await ctx.db.topic.findMany({
+                where: {
+                    userId: input.userId,
+                },
+                include: {
+                    user: true,
+                }
+            });
+
+            return result;
+        }),
+
     getSearching: publicProcedure
         .input(z.object({
             typing: z.string(),

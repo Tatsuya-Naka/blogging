@@ -43,7 +43,7 @@ export default function TopicRight({ userData }: Props) {
             <section className="grid pb-4 gap-4">
                 <div className="grid pt-0 p-4 gap-4 bg-white md:rounded-[0.375rem] border-t-[2rem] border-t-solid border-t-createAccountBG">
                     <div className="-mt-4 ">
-                        <a href="#"
+                        <a href={`/user/${userId}`}
                             className="flex "
                         >
                             <span className="mr-2 shrink-0 w-[3rem] h-[3rem] inline-block rounded-full relative bg-leftBoxText overflow-hidden align-middle ">
