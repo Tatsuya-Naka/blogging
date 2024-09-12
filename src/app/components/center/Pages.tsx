@@ -54,7 +54,7 @@ export default function Pages({ key, image, user, team, date, title, tags, react
                             </a>
                         </div>
 
-                        <div className="relative mr-[0.5rem] block text-center ">
+                        <div className="relative mr-[0.5rem] block">
                             <div className="...">
                                 <a className="md:hidden font-[500] text-loginText ">
                                     {user}
@@ -70,7 +70,7 @@ export default function Pages({ key, image, user, team, date, title, tags, react
                             </div>
 
                             <a className="text-[0.75rem] text-leftBoxText ">
-                                <p>{date}</p>
+                                <p className="pl-1">{date}</p>
                             </a>
                         </div>
                     </div>
