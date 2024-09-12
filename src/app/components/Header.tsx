@@ -2,7 +2,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { trpc } from "~/server/utils/trpc";
+import { useRouter } from "next/navigation";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -19,6 +21,8 @@ interface Props {
 
 export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
     const [isClicked, setIsClicked] = useState(false);
+    const [typing, setTyping] = useState("");
+    const router = useRouter();
 
     const handleDropDown = () => {
         setIsClicked(prevState => !prevState);
@@ -30,9 +34,34 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
         console.log("Click Edit Bar");
     }
 
+    const handleTyping = (e: React.FormEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        setTyping((e.target as HTMLInputElement).value);
+    };
+
+    useEffect(() => {
+        console.log(typing);
+    }, [typing]);
+
+    const { data: result, refetch: refetchResult } = trpc.topic.getSearchingLimits.useQuery({
+        typing,
+    });
+
+    useEffect(() => {
+        console.log("Result: ", result);
+    }, [result]);
+
+    const url = `/search`;
+
+    const handleSubmit = () => {
+        console.log("search");
+        router.push(url);
+    };
+
     return (
         <nav className="bg-white z-[100] top-0 left-0 right-0 w-full h-[56px] fixed box-border">
             <div className="flex items-center relative px-[0.5rem] max-w-[1380px] m-auto h-[56px] box-border">
+                {/* Icon */}
                 <div className="flex items-center">
                     <div className="flex breakPointEngine:hidden inline-block">
                         <button
@@ -53,6 +82,8 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                         />
                     </a>
                 </div>
+
+                {/* Search Box */}
                 <div className="flex flex-1-auto mx-[1rem] items-center max-w-[680px] box-border">
                     <form className="block box-border w-full">
                         {/* <input className="flex breakPointEngine:hidden" placeholder="Search..."/> */}
@@ -63,7 +94,43 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                                     id="search"
                                     className="pl-[40px] pr-[142px] leading-relaxed py-[calc(0.5rem-2.5px)] px-0.5rem text-[1rem] w-full resize-y border-[1.5px] border-borderColor appearance-none rounded-[0.375rem] transition-all duration-100 ease-custom-bezier"
                                     placeholder="Search..."
+                                    // value={typing}
+                                    onChange={handleTyping}
+                                    onSubmit={handleSubmit}
                                 />
+                                {/* search drop box */}
+                                {typing.length > 0 &&
+                                    <ul className="m-0 p-0 border-[1px] border-solid border-[#d6d6d7] rounded-[0.375rem] bg-white absolute shadow-customForCenterPage top-[41px] left-0 right-0 ">
+                                        {result?.map((item, index) => {
+                                            return (
+                                                <li className={`${index === 0 && "rounded-t-[0.375rem]"} p-[8px] border-b-[1px] border-b-solid `}>
+                                                    <a href={`/topic/${item.user.id}/${item.id}`}
+                                                        className="...">
+                                                        <div className="text-[12px] text-[#717171] ">
+                                                            {item.user.id}
+                                                        </div>
+
+                                                        <strong className="text-engineBorderColor block font-bold ">
+                                                            {item.title}
+                                                        </strong>
+
+                                                        <div className="text-[12px] text-[#717171]">
+                                                            {"Sep 1 '22"}
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            )
+                                        })}
+                                        <div className="bg-[#efefef] text-[13px] border-t-[1px] border-t-solid border-t-engineBottomBg rounded-b-[0.375rem] py-[12px] px-[8px] flex items-baseline justify-between">
+                                            <span className="text-[14px] ">
+                                                Submit search for advanced filtering
+                                            </span>
+                                            <span className="text-engineBorderColor font-bold pl-[4px] ">
+                                                Blogging
+                                            </span>
+                                        </div>
+                                    </ul>
+                                }
                                 <button
                                     type="submit"
                                     className="absolute py-0 mt-0 right-auto inset-px p-[0.5rem] bg-transparent hover:bg-logInBg text-engineBorderColor hover:text-createBorderHover inline-block rounded-[0.375rem] text-center rounded-none"
@@ -93,10 +160,12 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                     </form>
                 </div>
 
+                {/* Profile or something */}
                 <div className="flex items-center h-100 ml-auto">
                     <div className="flex breakPointEngine:hidden">
+                        {/* search icon */}
                         <Link
-                            href="/research"
+                            href={url}
                             className="bg-white text-engineBorderColor font-[700] mx-1 p-[0.5rem] inline-block rounded-[0.375rem] w-full hover:text-createBorderHover hover:bg-engineMarkBGHover"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="..." focusable="false">
@@ -172,12 +241,12 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                 </div>
                 {isClicked &&
                     <div
-                        className="absolute z-[100] sm:w-[250px] sm:left-auto left-2 right-2 inline-block bg-white text-engineBorderColor rounded-[0.375rem] shadow-xl p-[0.5rem] top-full mt-[0.25rem] sm:max-w-[360px] sm:w-full min-w-[250px]"
+                        className="absolute z-[100] sm:w-[250px] sm:left-auto left-2 right-2 inline-block bg-white text-engineBorderColor rounded-[0.375rem] shadow-xl p-[0.5rem] top-full mt-[0.25rem] sm:max-w-[250px] sm:w-full min-w-[250px]"
                     >
                         <ul className="block">
                             <li className="text-left pb-2 mb-2 border-b border-0 border-solid border-[#d6d6d7]">
                                 <a
-                                    href="#"
+                                    href={`/profile/${userData?.id}`}
                                     className="leading-5 bg-transparent hover:bg-engineMarkBGHover text-loginText hover:text-createBorderHover flex px-[1rem] py-[0.5rem] relative rounded-[0.375rem] w-full"
                                 >
                                     <div>

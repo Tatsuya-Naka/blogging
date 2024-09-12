@@ -29,6 +29,7 @@ const config: Config = {
         removeText: "rgb(220, 38, 38)",
         removeHoverText: "rgb(185, 28, 28)",
         topicEdit: "rgba(245, 158, 11, 0.1)",
+        engineBottomBg: "rgba(23, 23, 23, 0.1)",
       },
       appearance: {
         none: 'none',
@@ -63,6 +64,9 @@ const config: Config = {
       },
       padding: {
         'custom': 'clamp(0.25rem, 0.25em, 0.5em) 0.5em',
+      },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(180deg, #000000, 8rem, transparent 8rem)',
       },
     },
   },

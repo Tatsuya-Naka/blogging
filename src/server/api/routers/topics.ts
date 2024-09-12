@@ -6,11 +6,56 @@ import {
 } from "~/server/api/trpc";
 
 export const topicRouter = createTRPCRouter({
+    getSearching: publicProcedure
+        .input(z.object({
+            typing: z.string(),
+        }))
+        .query(async ({ ctx, input }) => {
+            const result = await ctx.db.topic.findMany({
+                where: {
+                    title: {
+                        contains: input.typing,
+                        mode: "insensitive",
+                    },
+                },
+                include: {
+                    user: true
+                }
+            });
+
+            return result;
+        }),
+
+    getSearchingLimits: publicProcedure
+        .input(z.object({
+            typing: z.string(),
+        }))
+        .query(async ({ ctx, input }) => {
+            const result = await ctx.db.topic.findMany({
+                where: {
+                    title: {
+                        contains: input.typing,
+                        mode: "insensitive",
+                    },
+                },
+                take: 5,
+                include: {
+                    user: true
+                }
+            });
+            // const [firstResult, ...restOfResult] = result;
+            // return {
+            //     firstResult,
+            //     restOfResult
+            // };
+            return result;
+        }),
+
     deleteTopic: publicProcedure
         .input(z.object({
             topicId: z.string(),
         }))
-        .mutation(async({ctx, input}) => {
+        .mutation(async ({ ctx, input }) => {
             return await ctx.db.topic.delete({
                 where: {
                     id: input.topicId,
@@ -18,8 +63,21 @@ export const topicRouter = createTRPCRouter({
             })
         }),
 
+    getTopicsAllOne: publicProcedure
+        .query(async ({ ctx }) => {
+            const topics = await ctx.db.topic.findMany({
+                where: {
+                    userId: ctx.session?.user.id,
+                },
+                include: {
+                    user: true,
+                }
+            });
+            return topics;
+        }),
+
     getTopicsAll: publicProcedure
-        .query(async({ctx}) => {
+        .query(async ({ ctx }) => {
             const topics = await ctx.db.topic.findMany({
                 // where: {
                 //     isPrivate: false,
@@ -42,7 +100,7 @@ export const topicRouter = createTRPCRouter({
             userId: z.string(),
             topicId: z.string(),
         }))
-        .query(async({ctx, input}) => {
+        .query(async ({ ctx, input }) => {
             return await ctx.db.topic.findFirst({
                 where: {
                     userId: input.userId,
