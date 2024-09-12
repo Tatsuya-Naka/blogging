@@ -68,6 +68,9 @@ const config: Config = {
       backgroundImage: {
         'custom-gradient': 'linear-gradient(180deg, #000000, 8rem, transparent 8rem)',
       },
+      gridTemplateRows: {
+        'min-fr': 'min-content 1fr', // Custom value for min-content and 1fr
+      },
     },
   },
   plugins: [

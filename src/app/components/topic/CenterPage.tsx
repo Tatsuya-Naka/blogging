@@ -69,7 +69,7 @@ export default function TopicCenter({ userData }: Props) {
                                 /> */}
                             {/* <span className="m-auto block w-full h-auto bg-green"></span> */}
                         </a>
-                        <div className="px-[4rem] pt-[2rem] box-border">
+                        <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] pt-[1.25rem] sm: box-border">
                             <div className="sm:items-start sm:flex-row flex ">
                                 {userData?.id === userId && <div className="sm:mb-0 order-[9999] bg-topicEdit border-[1px] border-solid border-topicEdit rounded-[0.375rem] p-[0.25rem] ">
                                     <a href="#"
@@ -134,7 +134,7 @@ export default function TopicCenter({ userData }: Props) {
                     </div>
 
                     {/* content */}
-                    <div className="py-[2rem] px-[4rem] ">
+                    <div className="lg:py-[2rem] lg:px-[4rem] p-[0.75rem] md:px-[3rem] md:p-[2rem]">
                         <div className="text-[1.25rem] ">
                             <p>
                                 {topic && topic.description}
@@ -156,7 +156,7 @@ export default function TopicCenter({ userData }: Props) {
                     </div>
 
                     {/* Comment */}
-                    <div className="mb-4 border-t-1 border-0 border-solid border-[#efefef] py-[2rem] px-[4rem] ">
+                    <div className="mb-4 border-t-1 border-0 border-solid border-[#efefef] lg:py-[2rem] lg:px-[4rem]  p-[1.25rem] md:px-[3rem] md:p-[2rem]">
                         <div className="relative flex mb-6 justify-between items-center ">
                             <div className="flex items-center ">
                                 <h2 className="sm:text-[1.5rem] text-[1.25rem] sm:leading-[1.5] font-[700] text-[#242424] leading-[1.25] ">

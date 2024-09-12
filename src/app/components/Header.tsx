@@ -51,10 +51,11 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
         console.log("Result: ", result);
     }, [result]);
 
-    const url = `/search`;
+    const url = `/search?query=${typing}`;
 
-    const handleSubmit = () => {
-        console.log("search");
+    // handle search
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         router.push(url);
     };
 
@@ -85,7 +86,7 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
 
                 {/* Search Box */}
                 <div className="flex flex-1-auto mx-[1rem] items-center max-w-[680px] box-border">
-                    <form className="block box-border w-full">
+                    <form className="block box-border w-full" onSubmit={handleSubmit}>
                         {/* <input className="flex breakPointEngine:hidden" placeholder="Search..."/> */}
                         <div className="breakPointEngine:flex hidden flex-row flex-wrap">
                             <div className="relative flex-1 flex flex-col text-[1rem]">
@@ -96,7 +97,6 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                                     placeholder="Search..."
                                     // value={typing}
                                     onChange={handleTyping}
-                                    onSubmit={handleSubmit}
                                 />
                                 {/* search drop box */}
                                 {typing.length > 0 &&

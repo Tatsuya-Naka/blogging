@@ -17,8 +17,9 @@ type CustomeType = {
 };
 
 export default function Pages({ key, image, user, team, date, title, tags, reactions, comments, record, url }: CustomeType) {
+    
     return (
-        <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative rounded-customForCenterPage">
+        <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative md:rounded-customForCenterPage">
             <a
                 href={url}
                 className="pointer-events-none opacity-0 absolute top-0 right-0 bottom-0 left-0 text-createAccountBG "
@@ -139,7 +140,7 @@ export default function Pages({ key, image, user, team, date, title, tags, react
                                     </span>
                                     <span className="ml-[1em] flex gap-1 items-center font-[300]">
                                         8
-                                        <span className="inline">reactions</span>
+                                        <span className="sm:inline hidden">reactions</span>
                                     </span>
                                 </div>
                             </a>
@@ -150,7 +151,7 @@ export default function Pages({ key, image, user, team, date, title, tags, react
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" role="img" aria-labelledby="aneazmichuqc2e2kwgp5dlttmpbtk6mt" className="mr-[0.25rem]"><title id="aneazmichuqc2e2kwgp5dlttmpbtk6mt">Comments</title><path d="M10.5 5h3a6 6 0 110 12v2.625c-3.75-1.5-9-3.75-9-8.625a6 6 0 016-6zM12 15.5h1.5a4.501 4.501 0 001.722-8.657A4.5 4.5 0 0013.5 6.5h-3A4.5 4.5 0 006 11c0 2.707 1.846 4.475 6 6.36V15.5z"></path></svg>
                                 6
-                                <span className="...">comments</span>
+                                <span className="sm:inline hidden">comments</span>
                             </a>
                         </div>
 
