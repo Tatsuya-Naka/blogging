@@ -103,7 +103,7 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                                     <ul className="m-0 p-0 border-[1px] border-solid border-[#d6d6d7] rounded-[0.375rem] bg-white absolute shadow-customForCenterPage top-[41px] left-0 right-0 ">
                                         {result?.map((item, index) => {
                                             return (
-                                                <li className={`${index === 0 && "rounded-t-[0.375rem]"} p-[8px] border-b-[1px] border-b-solid `}>
+                                                <li key={item.id} className={`${index === 0 && "rounded-t-[0.375rem]"} p-[8px] border-b-[1px] border-b-solid `}>
                                                     <a href={`/topic/${item.user.id}/${item.id}`}
                                                         className="...">
                                                         <div className="text-[12px] text-[#717171] ">
