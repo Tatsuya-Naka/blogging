@@ -69,9 +69,9 @@ export default function TopicCenter({ userData }: Props) {
                                 /> */}
                             {/* <span className="m-auto block w-full h-auto bg-green"></span> */}
                         </a>
-                        <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] pt-[1.25rem] sm: box-border">
-                            <div className="sm:items-start sm:flex-row flex ">
-                                {userData?.id === userId && <div className="sm:mb-0 order-[9999] bg-topicEdit border-[1px] border-solid border-topicEdit rounded-[0.375rem] p-[0.25rem] ">
+                        <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] flex flex-col pt-[1.25rem] sm:box-border">
+                            <div className="sm:items-start sm:flex-row flex flex-col">
+                                {userData?.id === userId && <div className="sm:mb-0 sm:mb-0 mb-4 sm:order-[9999] bg-topicEdit border-[1px] border-solid border-topicEdit rounded-[0.375rem] p-[0.25rem] ">
                                     <a href="#"
                                         className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
                                     >
@@ -204,7 +204,7 @@ export default function TopicCenter({ userData }: Props) {
                             <form
                                 className="flex mb-[1rem] "
                             >
-                                <span className="mr-2 shrink-0 md:w-[2rem] md:h-[2rem] inline-block rounded-full relative overflow-hidden align-middle ">
+                                <span className="mr-2 shrink-0 md:w-[2rem] md:h-[2rem] w-[1.5rem] h-[1.5rem] inline-block rounded-full relative overflow-hidden align-middle ">
                                     {/* <img src="https://media.dev.to/cdn-cgi/image/width=90,height=90,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F2023473%2F6e1b385a-4152-4773-a392-598d4981575d.png" width="32" height="32" alt="pic" className=" overflow-hidden" id="comment-primary-user-profile--avatar" loading="lazy" /> */}
                                     {userData ? <Image
                                         src={userData?.image ?? ""}
@@ -221,7 +221,7 @@ export default function TopicCenter({ userData }: Props) {
                                 <div className="flex flex-col flex-1 min-w-0 ">
                                     <div className="flex flex-1 flex-col mb-[0.75rem] bg-white border-[1px] border-solid border-borderColor  rounded-[0.375rem] ">
                                         <textarea
-                                            className="resize-none outline-none  max-h-[40vh] w-full leading-[1.5] text-[1rem] border-[1.5px] rounded-[0.375rem] "
+                                            className="resize-none outline-none  max-h-[40vh] w-full leading-[1.5] text-[1rem] p-[0.5rem] border-[1.5px] rounded-[0.375rem] "
                                             placeholder="Add to the discussion"
                                         />
                                     </div>

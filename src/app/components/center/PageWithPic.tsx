@@ -64,7 +64,7 @@ export default function PageWithPic({ image, user, team, date, title, tags, reac
 
                             <div className="relative mr-[0.5rem] block ">
                                 <div className="...">
-                                    <a className="md:hidden font-[500] text-loginText ">
+                                    <a className="md:hidden font-[500] text-loginText p-1">
                                         {user}
                                     </a>
 

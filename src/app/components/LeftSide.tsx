@@ -75,7 +75,7 @@ export default async function LeftSide() {
                             Home
                         </a>
                     </li>
-                    <li>
+                    {/* <li>
                         <a
                             href="/"
                             className="bg-transparent hover:bg-logInBg textloginText hover:text-loginHover flex py-[0.5rem] px-[1rem] relative rounded-[0.375rem] w-full items-center"
@@ -410,7 +410,7 @@ export default async function LeftSide() {
                             </span>
                             Home
                         </a>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
 
@@ -421,7 +421,7 @@ export default async function LeftSide() {
                     Other
                 </h2>
                 <ul className="m-0 p-0">
-                    <li
+                    {/* <li
                     >
                         <Link
                             href="/home"
@@ -477,7 +477,7 @@ export default async function LeftSide() {
                             </span>
                             Code of Conduct
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
 
@@ -536,7 +536,7 @@ export default async function LeftSide() {
                             #webdev
                         </Link>
                     </div>
-                    <div>
+                    {/* <div>
                         <Link
                             href="/home"
                             className="bg-transparent hover:bg-logInBg textloginText hover:text-loginHover flex py-[0.5rem] px-[1rem] relative w-full "
@@ -623,13 +623,13 @@ export default async function LeftSide() {
                         >
                             #webdev
                         </Link>
-                    </div>
+                    </div> */}
 
                 </div>
             </nav>
 
             <div className="box-border">
-                <div className="max-h-[calc(100vh - 56px - 2 * 1rem)] overflow-y-auto bg-white text-loginText shadow-custom-light-border rounded-custom p-[0.75rem] pb-[1rem] flex items-center flex-col">
+                {/* <div className="max-h-[calc(100vh - 56px - 2 * 1rem)] overflow-y-auto bg-white text-loginText shadow-custom-light-border rounded-custom p-[0.75rem] pb-[1rem] flex items-center flex-col">
                     <div
                         className="relative w-full flex items-center "
                     >
@@ -669,11 +669,11 @@ export default async function LeftSide() {
                         <p className="mb-[1.25rem] ">Neon is the official database partner of DEV</p>
                         <p className="mb-[1.25rem]">Happy coding</p>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="box-border pt-4">
-                <div className="max-h-[calc(100vh - 56px - 2 * 1rem)] overflow-y-auto bg-white text-loginText shadow-custom-light-border rounded-custom p-[0.75rem] pb-[1rem] flex items-center flex-col">
+                {/* <div className="max-h-[calc(100vh - 56px - 2 * 1rem)] overflow-y-auto bg-white text-loginText shadow-custom-light-border rounded-custom p-[0.75rem] pb-[1rem] flex items-center flex-col">
                     <div
                         className="relative w-full flex items-center "
                     >
@@ -713,7 +713,7 @@ export default async function LeftSide() {
                         <p className="mb-[1.25rem] ">Neon is the official database partner of DEV</p>
                         <p className="mb-[1.25rem]">Happy coding</p>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <footer

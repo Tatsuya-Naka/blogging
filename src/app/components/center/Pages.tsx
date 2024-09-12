@@ -17,7 +17,7 @@ type CustomeType = {
 };
 
 export default function Pages({ key, image, user, team, date, title, tags, reactions, comments, record, url }: CustomeType) {
-    
+
     return (
         <div className="md:p-[1.25rem] p-[1rem] sm:text-[1.5rem] bg-white shadow-custom-light-border mb-[0.5rem] relative md:rounded-customForCenterPage">
             <a
@@ -57,7 +57,7 @@ export default function Pages({ key, image, user, team, date, title, tags, react
 
                         <div className="relative mr-[0.5rem] block">
                             <div className="...">
-                                <a className="md:hidden font-[500] text-loginText ">
+                                <a className="md:hidden font-[500] text-loginText p-1">
                                     {user}
                                 </a>
 

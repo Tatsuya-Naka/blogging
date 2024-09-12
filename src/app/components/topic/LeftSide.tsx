@@ -4,7 +4,7 @@ export default async function TopicLeft() {
     const session = await getServerAuthSession();
 
     return (
-        <div className="block md:w-[4rem] box-border">
+        <div className="block md:w-[4rem] box-border md:row-span-2">
             <div className="md:rouded-[0.75rem] md:p-0 md:pb-0 md:bg-bg md:grid md:gap-[1.5rem] md:sticky md:border-none md:justify-stretch md:relative 
                 md:top-[128px] md:z-1 fixed md:shadow-none shadow-topicShadow
                 left-0 right-0 bottom-0 rounded-[0.375rem] bg-white p-[0.5rem] z-[50] rounded-t-[0.375rem]

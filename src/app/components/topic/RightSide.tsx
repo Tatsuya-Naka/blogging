@@ -39,9 +39,9 @@ export default function TopicRight({ userData }: Props) {
     }, [topic]);
 
     return (
-        <div className="block w-[3fr]">
+        <div className="block md:w-[3fr] w-[5fr]">
             <section className="grid pb-4 gap-4">
-                <div className="grid pt-0 p-4 gap-4 bg-white rounded-[0.375rem] border-t-[2rem] border-t-solid border-t-createAccountBG">
+                <div className="grid pt-0 p-4 gap-4 bg-white md:rounded-[0.375rem] border-t-[2rem] border-t-solid border-t-createAccountBG">
                     <div className="-mt-4 ">
                         <a href="#"
                             className="flex "
@@ -83,7 +83,7 @@ export default function TopicRight({ userData }: Props) {
                     </div>
                 </div>
 
-                <div className="bg-white text-leftBoxText rounded-[0.375rem] ">
+                <div className="bg-white text-leftBoxText md:rounded-[0.375rem] ">
                     <div className="py-[0.75rem] px-[1rem] border-b-[1px] border-b-solid border-b-bg ">
                         <h3 className="sm:text-[1.25rem] text-[1.125rem] sm:leading-[1.5] font-[700] text-[#242424] ">
                             Trending on <a href="https://dev.to">Dev Community</a> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="24" height="24" role="img" aria-labelledby="ak0qrmk1dojdbl8qwzbsm7r99ufkjt8u" className="align-bottom"><title id="ak0qrmk1dojdbl8qwzbsm7r99ufkjt8u">Hot</title>

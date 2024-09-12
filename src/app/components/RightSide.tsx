@@ -22,38 +22,7 @@ export default async function RightSide() {
                         </div>
                     </a>
                 </div>
-                <div>
-                    <a href="#" className="p-[1rem] block border-b-[1px] border-solid border-bg text-loginText ">
-                        How do you raise funds for an open-source project?
-                        <div className="text-[#717171] text-[0.875rem] pt-[0.25rem]">
-                            6 comments
-                        </div>
-                    </a>
-                </div>
-                <div>
-                    <a href="#" className="p-[1rem] block border-b-[1px] border-solid border-bg text-loginText ">
-                        How do you raise funds for an open-source project?
-                        <div className="text-[#717171] text-[0.875rem] pt-[0.25rem]">
-                            6 comments
-                        </div>
-                    </a>
-                </div>
-                <div>
-                    <a href="#" className="p-[1rem] block border-b-[1px] border-solid border-bg text-loginText ">
-                        How do you raise funds for an open-source project?
-                        <div className="text-[#717171] text-[0.875rem] pt-[0.25rem]">
-                            6 comments
-                        </div>
-                    </a>
-                </div>
-                <div>
-                    <a href="#" className="p-[1rem] block border-b-[1px] border-solid border-bg text-loginText ">
-                        How do you raise funds for an open-source project?
-                        <div className="text-[#717171] text-[0.875rem] pt-[0.25rem]">
-                            6 comments
-                        </div>
-                    </a>
-                </div>
+                
             </section>
 
             <section className="bg-white text-loginText shadow-custom-light-border rounded-[0.375rem] mt-[1rem]">
@@ -85,7 +54,7 @@ export default async function RightSide() {
                         <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
                             10 Things You Can Learn from Netflix Architecture
                         </a>
-                        <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
+                        {/* <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
                             10 Things You Can Learn from Netflix Architecture
                         </a>
                         <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
@@ -141,7 +110,7 @@ export default async function RightSide() {
                         </a>
                         <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
                             10 Things You Can Learn from Netflix Architecture
-                        </a>
+                        </a> */}
                     </div>
                 </div>
             </section>
@@ -156,7 +125,7 @@ export default async function RightSide() {
                         <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
                             Button Animation CSS
                         </a>
-                        <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
+                        {/* <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
                             Button Animation CSS
                         </a>
                         <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
@@ -212,7 +181,7 @@ export default async function RightSide() {
                         </a>
                         <a href="#" className="block p-[1rem] border-b-[1px] border-solid border-bg">
                             Button Animation CSS
-                        </a>
+                        </a> */}
                     </div>
                 </div>
             </section>
