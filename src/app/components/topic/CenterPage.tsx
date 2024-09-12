@@ -185,7 +185,7 @@ export default function TopicCenter({ userData }: Props) {
                                             :
                                             <button
                                                 // onClick={(href)}
-                                                className="rounded-l-[0.375rem] border-[#d6d6d7] border-[2px] py-[0.5rem] px-[1rem] text-[1rem] relative inline-block leading-[1.5rem] font-[500] text-center border-solid"
+                                                className="rounded-[0.375rem] border-[#d6d6d7] border-[2px] py-[0.5rem] px-[1rem] text-[1rem] relative inline-block leading-[1.5rem] font-[500] text-center border-solid"
                                             >
                                                 Subscribe
                                             </button>
