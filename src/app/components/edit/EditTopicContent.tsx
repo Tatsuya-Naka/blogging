@@ -83,7 +83,7 @@ export default function EditTopicContent({ userData }: Props) {
             });
             console.log("Updated Topic: ", result);
             setIsUpdated(true);
-            refetchTopic();
+            await refetchTopic();
         } catch (err) {
             console.log("Error occured during updating topic: ", err);
         }
