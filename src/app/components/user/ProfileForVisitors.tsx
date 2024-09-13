@@ -91,7 +91,7 @@ export default function ProfileForVisitors({ userData }: Props) {
                                 </div>
 
                                 <p className="md:text-[1.125rem] max-w-75 text-[1rem] mb-4 mx-auto text-[#242424] ">
-                                    404 bio not found
+                                    {user?.bio}
                                 </p>
 
                                 <div className="flex md:justify-center md:ml-0 text-[0.875rem] text-[#717171] mb-[0.5rem] flex-wrap items-center ml-[calc(-1*0.25rem)]">
