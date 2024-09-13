@@ -49,6 +49,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  bio           String?   @default("404 bio not found")
   accounts      Account[]
   posts         Post[]
   sessions      Session[]
@@ -71,7 +72,7 @@ model Topic {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   isPrivate   Boolean    @default(false)
-  bgimages    BgImage[]
+  bgimages    String
   images      Image[]
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   tags        TopicTag[]
@@ -93,13 +94,6 @@ model TopicTag {
 }
 
 model Image {
-  id      String @id @default(cuid())
-  url     String
-  topicId String
-  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
-}
-
-model BgImage {
   id      String @id @default(cuid())
   url     String
   topicId String

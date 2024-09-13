@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -17,6 +19,12 @@ interface Props {
 
 
 export default function PopupProfile({ userData, userId, image, userName, bio }: Props) {
+    const router = useRouter();
+
+    const handleRoute = () => {
+        router.push("/setting/profile");
+    };
+
     return (
         <div className="absolute z-[400] sm:w-[360px] shadow-customForCenterPage grid pt-0 p-4 gap-4 bg-white rounded-[0.375rem] border-t-[2rem] border-t-solid border-t-createAccountBG">
             <div className="-mt-4 ">
@@ -40,12 +48,15 @@ export default function PopupProfile({ userData, userId, image, userName, bio }:
             </div>
 
             <div className="...">
-                <button className="w-full border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] text-[1rem] leading-[1.5rem] font-[500] text-center pointer border-solid bg-createAccountBG text-[#f9f9f9] ">
-                    {userData?.id === userId ?
-                        "Edit profile" :
-                        "Follow"
-                    }
+                {userData?.id === userId ?
+                    <button onClick = {handleRoute} className="w-full border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] text-[1rem] leading-[1.5rem] font-[500] text-center pointer border-solid bg-createAccountBG text-[#f9f9f9] ">
+                        Edit profile
+                    </button>   
+                    :
+                    <button className="w-full border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] text-[1rem] leading-[1.5rem] font-[500] text-center pointer border-solid bg-createAccountBG text-[#f9f9f9] ">
+                    Follow
                 </button>
+                }
             </div>
 
             <div className="text-[#575757] ">

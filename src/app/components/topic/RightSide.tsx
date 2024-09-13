@@ -1,6 +1,6 @@
 'use client';
 import { trpc } from "~/server/utils/trpc";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
 
@@ -38,6 +38,12 @@ export default function TopicRight({ userData }: Props) {
         console.log(topic);
     }, [topic]);
 
+    const router = useRouter();
+
+    const handleRoute = () => {
+        router.push("/setting/profile");
+    };
+
     return (
         <div className="block md:w-[3fr] w-[5fr]">
             <section className="grid pb-4 gap-4">
@@ -63,12 +69,16 @@ export default function TopicRight({ userData }: Props) {
                     </div>
 
                     <div className="...">
-                        <button className="w-full border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] text-[1rem] leading-[1.5rem] font-[500] text-center pointer border-solid bg-createAccountBG text-[#f9f9f9] ">
-                            {userData?.id === userId ?
-                                "Edit profile" :
-                                "Follow"
-                            }
-                        </button>
+                        {userData?.id === userId
+                            ?
+                            <button onClick = {handleRoute} className="w-full border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] text-[1rem] leading-[1.5rem] font-[500] text-center pointer border-solid bg-createAccountBG text-[#f9f9f9] ">
+                                Edit Profile
+                            </button>
+                            :
+                            <button className="w-full border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] text-[1rem] leading-[1.5rem] font-[500] text-center pointer border-solid bg-createAccountBG text-[#f9f9f9] ">
+                                Follow
+                            </button>
+                        }
                     </div>
 
                     <div>

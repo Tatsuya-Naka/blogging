@@ -3,6 +3,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 // import { imageRouter } from "./routers/image";
 import { topicRouter } from "./routers/topics";
 import { demoRouter } from "./routers/demo";
+import { profileRouter } from "./routers/profile";
 
 /**
  * This is the primary router for your server.
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   post: postRouter,
   // imageRouter,
   topic: topicRouter,
+  profile: profileRouter,
   demo: demoRouter,
 });
 

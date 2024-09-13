@@ -30,6 +30,7 @@ const config: Config = {
         removeHoverText: "rgb(185, 28, 28)",
         topicEdit: "rgba(245, 158, 11, 0.1)",
         engineBottomBg: "rgba(23, 23, 23, 0.1)",
+        engineBorderForProfile: "rgb(163, 163, 163)",
       },
       appearance: {
         none: 'none',

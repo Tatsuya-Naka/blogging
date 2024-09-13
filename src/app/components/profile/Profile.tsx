@@ -3,6 +3,8 @@ import Image from "next/image";
 import ListPost from "./ListPost";
 import { useState, useEffect } from "react";
 import { trpc } from "~/server/utils/trpc";
+import { useRouter } from "next/navigation";
+
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
     email?: string | null;   // Allow string, null, or undefined
@@ -22,11 +24,27 @@ export default function ProfileUser({ userData }: Props) {
     };
 
     const { data: topics, refetch: refetchTopics } = trpc.topic.getTopicsAllOne.useQuery();
+    const { data: profile, refetch: refetchProfle } = trpc.profile.getProfileInfo.useQuery();
+    const [name, setName] = useState("");
+    const [image, setImage] = useState("");
+    const [bio, setBio] = useState("");
 
     useEffect(() => {
         console.log(topics);
     }, [topics]);
     const items = topics?.length;
+
+    const router = useRouter();
+
+    const handleRoute = () => {
+        router.push("/setting/profile");
+    };
+
+    useEffect(() => {
+        setName(profile?.name ?? "");
+        setImage(profile?.image ?? "");
+        setBio(profile?.bio ?? "");
+    }, [profile]);
 
     return (
         <div className="box-border bg-bg h-full w-full">
@@ -37,8 +55,8 @@ export default function ProfileUser({ userData }: Props) {
                             <div className="relative md:mt-[calc(-1*4rem)] md:mb-[0.75rem] mt-[calc(-1*2rem)] mb-[1rem] px-[1rem] ">
                                 <span className="md:p-[0.5rem] md:w-[8rem] md:h-[8rem] w-[4rem] h-[4rem] bg-black p-[0.25rem] inline-block rounded-full overflow-hidden relative shrink-0 ">
                                     <Image
-                                        src={userData?.image ?? ""}
-                                        alt={userData?.name ?? "Admin"}
+                                        src={image ?? ""}
+                                        alt={name ?? "Admin"}
                                         width={128}
                                         height={128}
                                         className="h-full w-full rounded-full align-bottom inline-block"
@@ -46,7 +64,7 @@ export default function ProfileUser({ userData }: Props) {
                                 </span>
 
                                 <div className="md:top-[4rem] flext right-0 top-[2rem] absolute left-0 justify-end flex pt-[1.5rem] pr-[1.5rem] ">
-                                    <button className="border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] leading-[1.5rem] font-[500] items-center border-solid bg-createAccountBG hover:bg-createBorderHover border-transparent text-[#f9f9f9] shadow-custom-light-border ">
+                                    <button onClick={handleRoute} className="border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] leading-[1.5rem] font-[500] items-center border-solid bg-createAccountBG hover:bg-createBorderHover border-transparent text-[#f9f9f9] shadow-custom-light-border ">
                                         Edit profile
                                     </button>
                                 </div>
@@ -55,12 +73,12 @@ export default function ProfileUser({ userData }: Props) {
                             <div className="p-[1rem] ">
                                 <div className="mb-2 items-center ">
                                     <h1 className="leading-[1.25] sm:text-[1.875rem] text-[#090909] text-[1.5rem] inline-flex min-h-[40px] items-center font-[700] ">
-                                        {userData?.name}
+                                        {name}
                                     </h1>
                                 </div>
 
                                 <p className="md:text-[1.125rem] max-w-75 text-[1rem] mb-4 mx-auto text-[#242424] ">
-                                    404 bio not found
+                                    {bio}
                                 </p>
 
                                 <div className="flex md:justify-center md:ml-0 text-[0.875rem] text-[#717171] mb-[0.5rem] flex-wrap items-center ml-[calc(-1*0.25rem)]">
@@ -93,7 +111,7 @@ export default function ProfileUser({ userData }: Props) {
                                         <path d="M19 22H5a3 3 0 01-3-3V3a1 1 0 011-1h14a1 1 0 011 1v12h4v4a3 3 0 01-3 3zm-1-5v2a1 1 0 002 0v-2h-2zm-2 3V4H4v15a1 1 0 001 1h11zM6 7h8v2H6V7zm0 4h8v2H6v-2zm0 4h5v2H6v-2z"></path>
                                     </svg>
                                     <div className="flex gap-1">
-                                        <span>{items}</span> 
+                                        <span>{items}</span>
                                         {items && items > 2 ? "posts" : "post"} published
                                     </div>
                                 </div>

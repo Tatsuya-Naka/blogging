@@ -3,7 +3,7 @@ import Image from "next/image";
 import ListPost from "../profile/ListPost";
 import { useState, useEffect } from "react";
 import { trpc } from "~/server/utils/trpc";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
     email?: string | null;   // Allow string, null, or undefined
@@ -42,6 +42,13 @@ export default function ProfileForVisitors({ userData }: Props) {
         userId,
     });
 
+    const router = useRouter();
+
+    const handleRoute = () => {
+        router.push("/setting/profile");
+    };
+
+
     useEffect(() => {
         console.log("User Info: ", user);
     }, [user]);
@@ -65,16 +72,14 @@ export default function ProfileForVisitors({ userData }: Props) {
 
                                 <div className="md:top-[4rem] flext right-0 top-[2rem] absolute left-0 justify-end flex pt-[1.5rem] pr-[1.5rem] ">
                                     {userData?.id === userId ?
-                                        <button className="border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] leading-[1.5rem] font-[500] items-center border-solid bg-createAccountBG hover:bg-createBorderHover border-transparent text-[#f9f9f9] shadow-custom-light-border ">
+                                        <button onClick = {handleRoute} className="border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] leading-[1.5rem] font-[500] items-center border-solid bg-createAccountBG hover:bg-createBorderHover border-transparent text-[#f9f9f9] shadow-custom-light-border ">
                                             Edit profile
                                         </button> :
                                         <button className="border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] leading-[1.5rem] font-[500] items-center border-solid bg-createAccountBG hover:bg-createBorderHover border-transparent text-[#f9f9f9] shadow-custom-light-border ">
                                             Follow
                                         </button>
                                     }
-                                    {/* <button className="border-0 py-[0.5rem] px-[1rem] text-[1rem] relative inline-block rounded-[0.375rem] leading-[1.5rem] font-[500] items-center border-solid bg-createAccountBG hover:bg-createBorderHover border-transparent text-[#f9f9f9] shadow-custom-light-border ">
-                                        Edit profile
-                                    </button> */}
+
                                 </div>
                             </div>
 

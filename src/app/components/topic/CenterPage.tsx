@@ -72,7 +72,7 @@ export default function TopicCenter({ userData }: Props) {
                         <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] flex flex-col pt-[1.25rem] sm:box-border">
                             <div className="sm:items-start sm:flex-row flex flex-col">
                                 {userData?.id === userId && <div className="sm:mb-0 sm:mb-0 mb-4 sm:order-[9999] bg-topicEdit border-[1px] border-solid border-topicEdit rounded-[0.375rem] p-[0.25rem] ">
-                                    <a href="#"
+                                    <a href={`/edit/${userId}/${topicId}`}
                                         className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
                                     >
                                         Edit

@@ -90,22 +90,24 @@ export default function CenterPage({ userData }: Props) {
                         userData={userData}
                     />
                 }
-                <PageWithPic
-                    userData={userData}
-                    userId={firstTopic?.user.id ?? ""}
-                    image={firstTopic?.user.image ?? ""}
-                    user={firstTopic?.user.name ?? "Admin"}
-                    team={firstTopic?.user.name ?? "Admnin"}
-                    date={"Sep 1"}
-                    title={firstTopic?.title ?? ""}
-                    tags={[]}
-                    reactions={5}
-                    comments={3}
-                    record={4}
-                    url={`/topic/${firstTopic?.user.id}/${firstTopic?.id}`}
-                    headImage={SampleImage}
-                    bio={"Thank you"}
-                />
+                {firstTopic &&
+                    <PageWithPic
+                        userData={userData}
+                        userId={firstTopic?.user.id ?? ""}
+                        image={firstTopic?.user.image ?? ""}
+                        user={firstTopic?.user.name ?? "Admin"}
+                        team={firstTopic?.user.name ?? "Admnin"}
+                        date={"Sep 1"}
+                        title={firstTopic?.title ?? ""}
+                        tags={[]}
+                        reactions={5}
+                        comments={3}
+                        record={4}
+                        url={`/topic/${firstTopic?.user.id}/${firstTopic?.id}`}
+                        headImage={SampleImage}
+                        bio={"Thank you"}
+                    />
+                }
                 <Ad
                     category={"Dev Challenge"}
                     title={"Heads up about a new thing"}

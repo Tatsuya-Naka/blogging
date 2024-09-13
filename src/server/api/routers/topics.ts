@@ -1,3 +1,4 @@
+import { Description } from "@headlessui/react";
 import { z } from "zod";
 import {
     createTRPCRouter,
@@ -6,6 +7,29 @@ import {
 } from "~/server/api/trpc";
 
 export const topicRouter = createTRPCRouter({
+    saveTopic: protectedProcedure
+    .input(z.object({
+        bgImage: z.string(),
+        title: z.string(),
+        description: z.string(),
+        postId: z.string(),
+    }))
+    .mutation(async({ctx, input}) => {
+        const result = await ctx.db.topic.update({
+            where: {
+                userId: ctx.session.user.id,
+                id: input.postId,
+            },
+            data: {
+                title: input.title,
+                description: input.description,
+                bgimages: input.bgImage,
+            }
+        });
+
+        return result;
+    }),
+
     getAccountProfile: publicProcedure
         .input(z.object({
             userId: z.string(),
@@ -96,9 +120,9 @@ export const topicRouter = createTRPCRouter({
     getTopicsAll: publicProcedure
         .query(async ({ ctx }) => {
             const topics = await ctx.db.topic.findMany({
-                // where: {
-                //     isPrivate: false,
-                // },
+                where: {
+                    isPrivate: false,
+                },
                 include: {
                     user: true,
                 }
@@ -170,12 +194,8 @@ export const topicRouter = createTRPCRouter({
                     //         url: image
                     //     })),
                     // },
-                    // // Create a single background image
-                    bgimages: {
-                        create: {
-                            url: input.bgimages
-                        },
-                    },
+                    // // Create a single background imag
+                    bgimages: input.bgimages,
                 }
             });
         }),
