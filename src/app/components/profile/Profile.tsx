@@ -40,11 +40,15 @@ export default function ProfileUser({ userData }: Props) {
         router.push("/setting/profile");
     };
 
+    const handleRefetch = async() => {
+        await refetchProfle();
+    };
+
     useEffect(() => {
         setName(profile?.name ?? "");
         setImage(profile?.image ?? "");
         setBio(profile?.bio ?? "")
-        refetchProfle();
+        handleRefetch();
     }, [profile]);
 
     return (

@@ -150,7 +150,7 @@ export default function Main({ userData }: Props) {
                     console.log("Erro occured during the first upload of background image: ", err);
                 }
             }
-            handleFirstBgAttempt();
+            void handleFirstBgAttempt();
         }
     }, [isFirstUpload]);
 
@@ -190,7 +190,7 @@ export default function Main({ userData }: Props) {
                 // console.log("Object URL: ", getUrl);
                 console.log("Upload new image");
                 setBgImageURL(getUrl ?? "");
-                refetchBg();
+                await refetchBg();
 
                 console.log("Response: ", response);
             } catch (err) {

@@ -109,6 +109,7 @@ export const topicRouter = createTRPCRouter({
                         contains: input.typing,
                         mode: "insensitive",
                     },
+                    isPrivate: false,
                 },
                 take: 5,
                 include: {

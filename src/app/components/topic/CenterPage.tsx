@@ -56,7 +56,7 @@ export default function TopicCenter({ userData }: Props) {
         setIsDialogOpenForHidden(true);
     };
     const handleDialogCloseForHidden = async () => {
-        const handleStatus = async() => {
+        const handleStatus = async () => {
             const result = await mutation.mutateAsync({
                 topicId: topicId,
                 isPrivate: true,
@@ -68,7 +68,7 @@ export default function TopicCenter({ userData }: Props) {
         try {
             await handleStatus();
         }
-        catch(err) {
+        catch (err) {
             console.log("Error occured during change isPrivate: ", err);
         }
         setIsDialogOpenForHidden(false);
@@ -80,20 +80,25 @@ export default function TopicCenter({ userData }: Props) {
         e.preventDefault();
         setIsDialogOpenForArchive(true);
     };
-    const handleDialogCloseForArchive = () => {
-        const handleStatus = async() => {
+    const handleDialogCloseForArchive = async () => {
+        // const handleStatus = async () => {
+        //     const result = await mutation.mutateAsync({
+        //         topicId: topicId,
+        //         isPrivate: false,
+        //     });
+        //     console.log("Status Change: ", result);
+        //     await refetchTopic();
+        // };
+
+        try {
             const result = await mutation.mutateAsync({
                 topicId: topicId,
                 isPrivate: false,
             });
             console.log("Status Change: ", result);
             await refetchTopic();
-        };
-
-        try {
-            handleStatus();
         }
-        catch(err) {
+        catch (err) {
             console.log("Error occured during change isPrivate: ", err);
         }
         setIsDialogOpenForArchive(false);
@@ -116,18 +121,18 @@ export default function TopicCenter({ userData }: Props) {
                     {/* Title */}
                     <div>
                         {/* BackgroundImage */}
-                        {topic?.bgimage.url && 
+                        {topic?.bgimage.url &&
                             <a href="#"
-                            className="block rounded-[0.375rem] max-h-[calc(100vh - 56px - 2*1rem)] overflow-hidden "
-                        >
-                            <Image
-                                src={topic.bgimage.url}
-                                alt={topic.bgimage.id}
-                                width={1000}
-                                height={420}
-                                className="apect-[1000/420] m-auto block w-full h-auto object-contain"
-                            />
-                        </a>
+                                className="block rounded-[0.375rem] max-h-[calc(100vh - 56px - 2*1rem)] overflow-hidden "
+                            >
+                                <Image
+                                    src={topic.bgimage.url}
+                                    alt={topic.bgimage.id}
+                                    width={1000}
+                                    height={420}
+                                    className="apect-[1000/420] m-auto block w-full h-auto object-contain"
+                                />
+                            </a>
                         }
                         <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] flex flex-col pt-[1.25rem] sm:box-border">
                             <div className="sm:items-start sm:flex-row flex flex-col">

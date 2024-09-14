@@ -174,7 +174,7 @@ export default function EditTopicContent({ userData }: Props) {
 
                 console.log("Upload new image");
                 setBgImageUrl(getUrl ?? "");
-                refetchBg();
+                await refetchBg();
                 setIsPhotoUploaded(true);
                 console.log("Response: ", response);
             } catch (err) {
