@@ -48,7 +48,7 @@ export default function ProfileUser({ userData }: Props) {
         setName(profile?.name ?? "");
         setImage(profile?.image ?? "");
         setBio(profile?.bio ?? "")
-        handleRefetch();
+        void handleRefetch();
     }, [profile]);
 
     return (
