@@ -2,7 +2,8 @@
 // import { getServerAuthSession } from "~/server/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import ImageSample from "../images/simple_b.png";
 import Image from "next/image";
 import { trpc } from "~/server/utils/trpc";
@@ -27,6 +28,9 @@ export default function TopicCenter({ userData }: Props) {
     const imageData = ImageSample;
     const userId = pathname.split('/')[2] ?? '';
     const topicId = pathname.split('/')[3] ?? '';
+    const [isDialogOpenForHidden, setIsDialogOpenForHidden] = useState(false);
+    const [isDialogOpenForArchive, setIsDialogOpenForArchive] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(true);
 
 
     useEffect(() => {
@@ -42,9 +46,69 @@ export default function TopicCenter({ userData }: Props) {
     );
 
     useEffect(() => {
+        setIsPrivate(topic?.isPrivate ?? true);
         console.log(topic);
         console.log(topic?.user.name);
     }, [topic]);
+
+    const mutation = trpc.topic.changeStatus.useMutation();
+
+    const handleDialogOpenForHidden = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDialogOpenForHidden(true);
+    };
+    const handleDialogCloseForHidden = () => {
+        const handleStatus = async() => {
+            const result = await mutation.mutateAsync({
+                topicId: topicId,
+                isPrivate: true,
+            });
+            console.log("Status Change: ", result);
+            await refetchTopic();
+        };
+
+        try {
+            handleStatus();
+        }
+        catch(err) {
+            console.log("Error occured during change isPrivate: ", err);
+        }
+        setIsDialogOpenForHidden(false);
+    };
+
+
+
+    const handleDialogOpenForArchive = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDialogOpenForArchive(true);
+    };
+    const handleDialogCloseForArchive = () => {
+        const handleStatus = async() => {
+            const result = await mutation.mutateAsync({
+                topicId: topicId,
+                isPrivate: false,
+            });
+            console.log("Status Change: ", result);
+            await refetchTopic();
+        };
+
+        try {
+            handleStatus();
+        }
+        catch(err) {
+            console.log("Error occured during change isPrivate: ", err);
+        }
+        setIsDialogOpenForArchive(false);
+    };
+
+    useEffect(() => {
+        if (isPrivate) {
+            console.log("Private");
+        }
+        else {
+            console.log("Public");
+        }
+    }, [isPrivate]);
 
     return (
         <div className="grid gap-4 min-w-0 ">
@@ -82,11 +146,24 @@ export default function TopicCenter({ userData }: Props) {
                                     >
                                         Manage
                                     </a>
-                                    <a href="#"
+                                    {/* <a href="#"
                                         className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
                                     >
                                         Stats
-                                    </a>
+                                    </a> */}
+                                    {isPrivate ?
+                                        <div onClick={handleDialogOpenForArchive}
+                                            className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
+                                        >
+                                            Archive
+                                        </div>
+                                        :
+                                        <div onClick={handleDialogOpenForHidden}
+                                            className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
+                                        >
+                                            Hide
+                                        </div>
+                                    }
                                 </div>}
                                 <div className="flex mb-5 flex-1 items-start">
                                     {/* Icon */}
@@ -253,6 +330,97 @@ export default function TopicCenter({ userData }: Props) {
 
                     </div>
                 </div>
+
+                {isDialogOpenForHidden &&
+                    <Dialog
+                        open={isDialogOpenForHidden}
+                        className="relative z-[1000]"
+                        onClose={() => setIsDialogOpenForHidden(false)}
+                    >
+                        <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-60" />
+                        <div className="fixed overflow-hidden inset-0 flex items-center justify-center left-0 right-0 top-0 bottom-0">
+                            <DialogPanel className="sm:max-h-[201px] h-auto sm:w-[90%] h-full w-full max-w-[640px] grid grid-rows-[auto_1fr] bg-white sm:rounded-[0.75rem] border-none shadow-xl">
+                                <DialogTitle className="py-[0.5rem] pr-[0.5rem] sm:pl-[2rem] pl-[1rem] border-b-[1px] border-b-solid border-b-engineMarkBG flex justify-between items-center">
+                                    <h2 className="sm:text-[1.25rem] text-[1.1125rem] sm:leading-[1.5] font-[700] text-[#242424] leading-[1.25] mb-0">
+                                        Your post is public
+                                    </h2>
+
+                                    <button className="hover:bg-logInBg text-editColor hover:text-loginHover p-[0.5rem] bg-transparent rounded-[0.375rem] text-center "
+                                        onClick={() => setIsDialogOpenForHidden(false)}
+                                    >
+                                        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" className="..."><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636l4.95 4.95z"></path></svg>
+                                    </button>
+                                </DialogTitle>
+
+                                <div className="sm:p-[2rem] p-[0.75rem] max-h-full overflow-y-auto ">
+                                    <p className="m-0">
+                                        Everyone can see it. Do you want to hide it?
+                                    </p>
+
+                                    <div className="pt-4 ">
+                                        <button
+                                            className="mr-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
+                                            onClick={handleDialogCloseForHidden}
+                                        >
+                                            Yes, hide this post
+                                        </button>
+                                        <button
+                                            className="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300"
+                                            onClick={() => setIsDialogOpenForHidden(false)}
+                                        >
+                                            No, keep it visible
+                                        </button>
+                                    </div>
+                                </div>
+                            </DialogPanel>
+                        </div>
+                    </Dialog>
+                }
+                {isDialogOpenForArchive &&
+                    <Dialog
+                        open={isDialogOpenForArchive}
+                        className="relative z-[1000]"
+                        onClose={() => setIsDialogOpenForArchive(false)}
+                    >
+                        <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-60" />
+                        <div className="fixed overflow-hidden inset-0 flex items-center justify-center left-0 right-0 top-0 bottom-0">
+                            <DialogPanel className="sm:max-h-[201px] h-auto sm:w-[90%] h-full w-full max-w-[640px] grid grid-rows-[auto_1fr] bg-white sm:rounded-[0.75rem] border-none shadow-xl">
+                                <DialogTitle className="py-[0.5rem] pr-[0.5rem] sm:pl-[2rem] pl-[1rem] border-b-[1px] border-b-solid border-b-engineMarkBG flex justify-between items-center">
+                                    <h2 className="sm:text-[1.25rem] text-[1.1125rem] sm:leading-[1.5] font-[700] text-[#242424] leading-[1.25] mb-0">
+                                        Your post is private
+                                    </h2>
+
+                                    <button className="hover:bg-logInBg text-editColor hover:text-loginHover p-[0.5rem] bg-transparent rounded-[0.375rem] text-center "
+                                        onClick={() => setIsDialogOpenForArchive(false)}
+                                    >
+                                        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" className="..."><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636l4.95 4.95z"></path></svg>
+                                    </button>
+                                </DialogTitle>
+
+                                <div className="sm:p-[2rem] p-[0.75rem] max-h-full overflow-y-auto ">
+                                    <p className="m-0">
+                                        Nobody can see it. Do you want to archive it?
+                                    </p>
+
+                                    <div className="pt-4 ">
+                                        <button
+                                            className="mr-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
+                                            onClick={handleDialogCloseForArchive}
+                                        >
+                                            Yes, archive this post
+                                        </button>
+                                        <button
+                                            className="bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300"
+                                            onClick={() => setIsDialogOpenForArchive(false)}
+                                        >
+                                            No, keep it hidden
+                                        </button>
+                                    </div>
+                                </div>
+                            </DialogPanel>
+                        </div>
+                    </Dialog>
+                }
             </div>
         </div>
     );

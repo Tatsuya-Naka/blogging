@@ -7,6 +7,25 @@ import {
 } from "~/server/api/trpc";
 
 export const topicRouter = createTRPCRouter({
+    changeStatus: protectedProcedure
+    .input(z.object({
+        topicId: z.string(),
+        isPrivate: z.boolean(),
+    }))
+    .mutation(async ({ctx, input}) => {
+        const result = await ctx.db.topic.update({
+            where: {
+                userId: ctx.session.user.id,
+                id: input.topicId,
+            },
+            data: {
+                isPrivate: input.isPrivate,
+            },
+        });
+        
+        return result;
+    }),
+
     saveTopic: protectedProcedure
     .input(z.object({
         bgImage: z.string(),
