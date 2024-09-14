@@ -104,7 +104,7 @@ export default function CenterPage({ userData }: Props) {
                         comments={3}
                         record={4}
                         url={`/topic/${firstTopic?.user.id}/${firstTopic?.id}`}
-                        headImage={SampleImage}
+                        headImage={firstTopic.bgimage.url}
                         bio={"Thank you"}
                     />
                 }

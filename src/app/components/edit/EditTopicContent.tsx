@@ -20,10 +20,12 @@ interface Props {
 
 export default function EditTopicContent({ userData }: Props) {
     const pathname = usePathname();
+    const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
     const router = useRouter();
     const userId = pathname.split('/')[2] ?? "";
     const topicId = pathname.split('/')[3] ?? "";
-    const [bgImage, setBgImage] = useState("");
+    const [bgImageUrl, setBgImageUrl] = useState("");
+    const [bgImageId, setBaImageId] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const tags = "productive";
@@ -39,21 +41,25 @@ export default function EditTopicContent({ userData }: Props) {
     }, [userId, topicId]);
 
     useEffect(() => {
-        setBgImage(topic?.bgimages ?? "");
+        // setBgImage(topic?.bgimages ?? "");
         setTitle(topic?.title ?? "");
         setDescription(topic?.description ?? "");
+        setBgImageUrl(topic?.bgimage.url ?? "");
+        setBaImageId(topic?.bgimageId ?? "");
     }, [topic]);
 
     useEffect(() => {
-        console.log("BgImage: ", bgImage);
+        // console.log("BgImage: ", bgImage);
         console.log("Title: ", title);
         console.log("Description: ", description);
-    }, [bgImage, title, description, topic]);
+        console.log("BgImage Id: ", bgImageId);
+        console.log("Object URL: ", bgImageUrl);
+        if (bgImageUrl) {
+            setIsPhotoUploaded(true);
+        }
+    }, [bgImageUrl, , bgImageId, title, description, topic]);
 
-    const [isEdit, setIsEdit] = useState(true);
-    const [isDelete, setIsDelete] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
@@ -76,7 +82,8 @@ export default function EditTopicContent({ userData }: Props) {
         e.preventDefault();
         try {
             const result = await mutation.mutateAsync({
-                bgImage: bgImage,
+                bgImageId: bgImageId,
+                bgImageUrl: bgImageUrl,
                 title: title,
                 description: description,
                 postId: topicId,
@@ -99,64 +106,39 @@ export default function EditTopicContent({ userData }: Props) {
     const [bgImageFile, setBgImageFile] = useState<File | null | undefined>(null);
     const [images, setImages] = useState<File[]>([]);
 
-    const [bgImageURL, setBgImageURL] = useState("");
-
-    const handleClickEdit = (e: React.MouseEvent<HTMLDivElement>) => {
-        // Custom behavior on click
-        setIsEdit(true);
-        console.log("Click Edit");
-    };
-    const handleClickReview = (e: React.MouseEvent<HTMLDivElement>) => {
-        setIsEdit(false);
-        console.log("Click Review");
-    };
-
-    const uploadFileToS3 = async (file: File, folder: string) => {
-        try {
-            const uploadResponse = await fetch(bgImageURL, {
-                method: 'POST',
-                body: file,
-                headers: {
-                    'Content-Type': file.type, // Optional: Set content type
-                },
-            });
-
-            if (!uploadResponse.ok) {
-                throw new Error('Failed to upload file');
-            }
-
-            console.log('File uploaded successfully');
-        } catch (error) {
-            console.error('Error uploading file:', error);
-        }
-    };
-
     const handleImageSet = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         setBgImageFile(e.currentTarget.files?.[0]);
     }
 
+    const deleteMutate = trpc.demo.getPresignedURLForDelete.useMutation();
+    const { data: getUrl, refetch: refetchBg } = trpc.demo.getPresignedURLForShow.useQuery({
+        bgimageId: bgImageId,
+    });
+
     const handleRemove = async (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setBgImageFile(null);
         setIsPhotoUploaded(false);
-    }
+        try {
+            const url = await deleteMutate.mutateAsync({
+                bgimageId: bgImageId,
+            });
+            const response = await fetch(url, {
+                method: "DELETE",
+            });
 
+            if (!response.ok) {
+                console.log("Not success in delete background image");
+            }
+            
+            setBgImageUrl("");
 
-    const topicMutate = trpc.topic.create.useMutation();
-
-    const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!bgImageFile) return;
-        const topic = await topicMutate.mutateAsync({
-            title: title,
-            description: description,
-            bgimages: bgImageURL,
-        });
-        console.log("topic content: ", topic);
-        const userId = userData?.id;
-        const postId = topic.id;
-        router.push(`/topic/${userId}/${postId}`);
+            console.log(response);
+            console.log("Deleted URL: ", response.url);
+        } catch (err) {
+            console.log("Error occured during removing image: ", err);
+        }
     }
 
     const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -164,37 +146,43 @@ export default function EditTopicContent({ userData }: Props) {
         setDescription(e.target.value);
     }
 
-    const demoMutation = trpc.demo.uploadImage.useMutation();
-    const { data: bgImages, refetch: refetchImage } = trpc.demo.getImage.useQuery();
+    // const demoMutation = trpc.demo.uploadImage.useMutation();
+    // const { data: bgImages, refetch: refetchImage } = trpc.demo.getImage.useQuery();
+    const demoMutation = trpc.demo.getPresigneURL.useMutation();
 
     useEffect(() => {
         if (!bgImageFile) return;
-        setIsPhotoUploaded(true);
         const uploadImage = async () => {
             try {
-                // const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
-                const { url }: { url: string } = await demoMutation.mutateAsync({ type: bgImageFile.type });
+                // Presigned URL
+                const url = await demoMutation.mutateAsync({
+                    bgimageId: bgImageId,
+                });
+                console.log("URL: ", url);
 
-                await fetch(url, {
-                    method: "PUT",
+                const response = await fetch(url, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': bgImageFile.type,
                     },
-                    body: bgImageFile
+                    body: bgImageFile,
                 });
 
-                const imageURL = url.split('?')[0];
+                if (!response.ok) {
+                    console.log("Uploading Error");
+                }
 
-                console.log("URL: ", url);
-                console.log("Image URL: ", imageURL);
-                setBgImageURL(imageURL ? imageURL : "");
+                console.log("Upload new image");
+                setBgImageUrl(getUrl ?? "");
+                refetchBg();
+                setIsPhotoUploaded(true);
+                console.log("Response: ", response);
             } catch (err) {
                 console.error("Error uploading the image: ", err);
             }
         }
         void uploadImage();
         console.log("Upload...");
-        // refetchImage();
     }, [bgImageFile])
 
     return (
@@ -242,11 +230,11 @@ export default function EditTopicContent({ userData }: Props) {
                 <div className="rounded-customForCenterPage bg-white text-engineBorderColor shadow-custom-light-border lg:col-start-2 lg:col-end-2 md:col-span-2 overflow-y-auto h-[calc(100vh-144px)] flex flex-col box-border">
                     <div className="px-[4rem] py-[2rem] rounded-t-[0.375rem] rounded-b-none">
                         <div className="sm:flex-row flex sm:items-center sm:mb-[1.25rem] mb-[1rem] items-start flex-col ">
-                            {bgImage ?
+                            {bgImageUrl ?
                                 <>
                                     <img
                                         className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
-                                        src={bgImage}
+                                        src={bgImageUrl}
                                     />
 
                                     <div className="flex items-center">

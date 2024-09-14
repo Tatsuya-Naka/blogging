@@ -43,7 +43,8 @@ export default function ProfileUser({ userData }: Props) {
     useEffect(() => {
         setName(profile?.name ?? "");
         setImage(profile?.image ?? "");
-        setBio(profile?.bio ?? "");
+        setBio(profile?.bio ?? "")
+        refetchProfle();
     }, [profile]);
 
     return (

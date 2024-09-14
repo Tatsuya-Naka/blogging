@@ -1,8 +1,5 @@
 "use client";
-import { CiBookmark } from "react-icons/ci";
 import Image from "next/image";
-import { FaRegComment } from "react-icons/fa6";
-import { StaticImageData } from "next/image";
 import PopupProfile from "../profile/PopupProfile";
 import { useState, useEffect, useRef } from "react";
 
@@ -26,7 +23,7 @@ interface Props {
     comments: number,
     record: number,
     url: string,
-    headImage: StaticImageData;
+    headImage: string;
     bio: string;
 };
 

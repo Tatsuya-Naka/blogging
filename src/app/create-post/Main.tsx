@@ -1,10 +1,7 @@
 "use client";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useQuery } from '@tanstack/react-query';
-// import { uploadImageToS3 } from '~/server/utils/s3';
 import { trpc } from '~/server/utils/trpc';
 
 
@@ -20,10 +17,7 @@ interface Props {
 };
 
 export default function Main({ userData }: Props) {
-    const pathname = usePathname();
     const router = useRouter();
-    const [isEdit, setIsEdit] = useState(true);
-    const [isDelete, setIsDelete] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
     const [title, setTitle] = useState("");
@@ -34,43 +28,45 @@ export default function Main({ userData }: Props) {
     const [description, setDescription] = useState("");
     const [bgImageURL, setBgImageURL] = useState("");
 
-    const handleClickEdit = (e: React.MouseEvent<HTMLDivElement>) => {
-        // Custom behavior on click
-        setIsEdit(true);
-        console.log("Click Edit");
-    };
-    const handleClickReview = (e: React.MouseEvent<HTMLDivElement>) => {
-        setIsEdit(false);
-        console.log("Click Review");
-    };
-
     const handleDialogOpen = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
         setIsDialogOpen(true);
     };
-    const handleDialogClose = () => {
+
+    const deleteBgIdMutate = trpc.bg.delete.useMutation();
+    const handleDialogClose = async () => {
         setIsDialogOpen(false);
-        router.push("/home");
-    };
+        if (bgImageId) {
+            try {
+                const result = await deleteBgIdMutate.mutateAsync({
+                    bgImageId: bgImageId,
+                });
 
-    const uploadFileToS3 = async (file: File, folder: string) => {
-        try {
-            const uploadResponse = await fetch(bgImageURL, {
-                method: 'POST',
-                body: file,
-                headers: {
-                    'Content-Type': file.type, // Optional: Set content type
-                },
-            });
-
-            if (!uploadResponse.ok) {
-                throw new Error('Failed to upload file');
+                console.log("Deleted bgimage Id: ", result);
+            } catch (err) {
+                console.log("Error occured during deleting bgImage Id: ", err);
             }
-
-            console.log('File uploaded successfully');
-        } catch (error) {
-            console.error('Error uploading file:', error);
         }
+        if (bgImageURL) {
+            try {
+                const url = await deleteMutate.mutateAsync({
+                    bgimageId: bgImageId,
+                });
+                const response = await fetch(url, {
+                    method: "DELETE",
+                });
+
+                if (!response.ok) {
+                    console.log("Not success in delete background image");
+                }
+
+                console.log(response);
+                console.log("Deleted URL: ", response.url);
+            } catch (err) {
+                console.log("Error occured during removing image: ", err);
+            }
+        }
+        router.push("/home");
     };
 
     const handleImageSet = async (e: React.FormEvent<HTMLInputElement>) => {
@@ -78,9 +74,30 @@ export default function Main({ userData }: Props) {
         setBgImageFile(e.currentTarget.files?.[0]);
     }
 
+    const deleteMutate = trpc.demo.getPresignedURLForDelete.useMutation();
+
     const handleRemove = async (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setBgImageFile(null);
+        // setBgImageFile(null);
+        try {
+            const url = await deleteMutate.mutateAsync({
+                bgimageId: bgImageId,
+            });
+            const response = await fetch(url, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                console.log("Not success in delete background image");
+            }
+
+            setBgImageURL("");
+
+            console.log(response);
+            console.log("Deleted URL: ", response.url);
+        } catch (err) {
+            console.log("Error occured during removing image: ", err);
+        }
         setIsPhotoUploaded(false);
     }
 
@@ -93,11 +110,12 @@ export default function Main({ userData }: Props) {
 
     const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!bgImageFile) return;
+        // if (!bgImageFile) return;
         const topic = await topicMutate.mutateAsync({
             title: title,
             description: description,
-            bgimages: bgImageURL,
+            bgimageId: bgImageId,
+            bgImageUrl: bgImageURL,
         });
         console.log("topic content: ", topic);
         const userId = userData?.id;
@@ -110,64 +128,89 @@ export default function Main({ userData }: Props) {
         setDescription(e.target.value);
     }
 
-    const demoMutation = trpc.demo.uploadImage.useMutation();
-    const { data: bgImages, refetch: refetchImage } = trpc.demo.getImage.useQuery();
+    // create background id and get presignedURL
+    const demoMutation = trpc.demo.getPresigneURL.useMutation();
+    // const { data: bgImages, refetch: refetchImage } = trpc.demo.getImage.useQuery();
+    const [isFirstUpload, setIsFirstUpload] = useState(true);
+    const [bgImageId, setBgImageId] = useState("");
+
+    const createBgImageInfo = trpc.bg.create.useMutation();
+
+    useEffect(() => {
+        if (isFirstUpload) {
+            const handleFirstBgAttempt = async () => {
+                try {
+                    const result = await createBgImageInfo.mutateAsync({
+                        userId: userData?.id ?? ""
+                    });
+                    console.log("First Upload: ", result);
+                    setBgImageId(result.id)
+                }
+                catch (err) {
+                    console.log("Erro occured during the first upload of background image: ", err);
+                }
+            }
+            handleFirstBgAttempt();
+        }
+    }, [isFirstUpload]);
+
+    useEffect(() => {
+        setIsFirstUpload(false);
+        console.log("BackgroundImage Id: ", bgImageId)
+    }, [bgImageId])
+
+    // get Presigned URl from AWS S3
+    const { data: getUrl, refetch: refetchBg } = trpc.demo.getPresignedURLForShow.useQuery({
+        bgimageId: bgImageId,
+    });
 
     useEffect(() => {
         if (!bgImageFile) return;
         setIsPhotoUploaded(true);
         const uploadImage = async () => {
             try {
-                // const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
-                const { url }: { url: string } = await demoMutation.mutateAsync({ type: bgImageFile.type });
+                // Presigned URL
+                const url = await demoMutation.mutateAsync({
+                    bgimageId: bgImageId,
+                });
+                console.log("URL: ", url);
 
-                await fetch(url, {
-                    method: "PUT",
+                const response = await fetch(url, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': bgImageFile.type,
                     },
-                    body: bgImageFile
+                    body: bgImageFile,
                 });
 
-                const imageURL = url.split('?')[0];
+                if (!response.ok) {
+                    console.log("Uploading Error");
+                }
 
-                console.log("URL: ", url);
-                console.log("Image URL: ", imageURL);
-                setBgImageURL(imageURL ? imageURL : "");
+                // console.log("Object URL: ", getUrl);
+                console.log("Upload new image");
+                setBgImageURL(getUrl ?? "");
+                refetchBg();
+
+                console.log("Response: ", response);
             } catch (err) {
                 console.error("Error uploading the image: ", err);
             }
         }
         void uploadImage();
         console.log("Upload...");
-        // refetchImage();
-    }, [bgImageFile])
+    }, [bgImageFile]);
 
-    // const uploadPost = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     if (!bgImageFile) return;
-    //     const { url, fields }: { url: string, fields: any } = await demoMutation.mutateAsync() as any;
-    //     console.log("Fields: ", fields);
-    //     const data = {
-    //         ...fields,
-    //         'Content-Type': bgImageFile.type,
-    //         bgImageFile
-    //     };
-    //     console.log("After: ", data);
+    useEffect(() => {
+        console.log("Object URL: ", bgImageURL);
+    }, [bgImageURL]);
 
-    //     const formData = new FormData();
-
-    //     for (const name in data) {
-    //         formData.append(name, data[name]);
-    //     }
-
-    //     await fetch(url, {
-    //         method: 'POST',
-    //         body: formData,
-    //     });
-    //     console.log("URL: ", url);
-
-    // };
+    // useEffect(() => {
+    //     console.log("Object URL: ", getUrl);
+    //     console.log("Upload new image");
+    //     setBgImageURL(getUrl ?? "");
+    //     refetchBg();
+    // }, [getUrl, bgImageFile, isPhotoUploaded]);
 
     return (
         <main className="scroll-mt-[56px] block box-border bg-bg">
@@ -216,16 +259,11 @@ export default function Main({ userData }: Props) {
                         <div className="sm:flex-row flex sm:items-center sm:mb-[1.25rem] mb-[1rem] items-start flex-col ">
                             {isPhotoUploaded ?
                                 <>
-                                    {bgImages?.map((bgImage) => {
-                                        <img
-                                            className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
-                                            src={bgImage.id}
-                                        />
-                                    })}
-                                    {/* <img
-                                        className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem] " style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
+                                    <img
                                         src={bgImageURL}
-                                    /> */}
+                                        className="sm:mb-0 sm:mr-[1rem] w-[250px] h-[105px] rounded-[0.375rem] mb-[0.5rem]"
+                                        style={{ objectFit: "scale-down", aspectRatio: "auto 250 / 105" }}
+                                    />
 
                                     <div className="flex items-center">
                                         <label className="bg-transparent hover:bg-buttonHover border-[#d6d6d7] hover:border-[#a3a3a3] text-[#3d3d3d] hover:text-[#090909] py-1.5 px-3.5 rounded-[0.375rem] leading-[1.5rem] border-[2px] border-solid shadow-custom-light-border text-[1rem] relative inline-block  ">

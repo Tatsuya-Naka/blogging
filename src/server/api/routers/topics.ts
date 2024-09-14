@@ -28,12 +28,23 @@ export const topicRouter = createTRPCRouter({
 
     saveTopic: protectedProcedure
     .input(z.object({
-        bgImage: z.string(),
+        bgImageId: z.string(),
         title: z.string(),
         description: z.string(),
         postId: z.string(),
+        bgImageUrl: z.string(),
     }))
     .mutation(async({ctx, input}) => {
+        const updateBg = await ctx.db.bgImage.update({
+            where: {
+                id: input.bgImageId,
+                userId: ctx.session.user.id,
+            },
+            data: {
+                url: input.bgImageUrl,
+            }
+        });
+
         const result = await ctx.db.topic.update({
             where: {
                 userId: ctx.session.user.id,
@@ -42,7 +53,6 @@ export const topicRouter = createTRPCRouter({
             data: {
                 title: input.title,
                 description: input.description,
-                bgimages: input.bgImage,
             }
         });
 
@@ -57,6 +67,7 @@ export const topicRouter = createTRPCRouter({
             const result = await ctx.db.topic.findMany({
                 where: {
                     userId: input.userId,
+                    isPrivate: false,
                 },
                 include: {
                     user: true,
@@ -77,6 +88,7 @@ export const topicRouter = createTRPCRouter({
                         contains: input.typing,
                         mode: "insensitive",
                     },
+                    isPrivate: false
                 },
                 include: {
                     user: true
@@ -123,6 +135,7 @@ export const topicRouter = createTRPCRouter({
             })
         }),
 
+
     getTopicsAllOne: publicProcedure
         .query(async ({ ctx }) => {
             const topics = await ctx.db.topic.findMany({
@@ -144,6 +157,7 @@ export const topicRouter = createTRPCRouter({
                 },
                 include: {
                     user: true,
+                    bgimage: true,
                 }
             });
 
@@ -168,6 +182,7 @@ export const topicRouter = createTRPCRouter({
                 },
                 include: {
                     user: true, // This will include the related User data
+                    bgimage: true,
                     // Optionally include other related data if needed
                 },
             });
@@ -188,14 +203,25 @@ export const topicRouter = createTRPCRouter({
             description: z.string(),
             // tags: z.array(z.string()),    // Correct definition for tags
             // images: z.array(z.string()),  // Correct definition for images
-            bgimages: z.string(),         // Single string for bgimage
+            bgimageId: z.string(),         // Single string for bgimage
+            bgImageUrl: z.string(),
         }))
         .mutation(async ({ ctx, input }) => {
+            const bgImage = await ctx.db.bgImage.update({
+                where: {
+                    id: input.bgimageId,
+                },
+                data: {
+                    url: input.bgImageUrl,
+                },
+            });
+
             return await ctx.db.topic.create({
                 data: {
                     userId: ctx.session.user.id,
                     title: input.title,
                     description: input.description,
+                    bgimageId: input.bgimageId,
                     // // Create the tags relationship
                     // tags: {
                     //     create: input.tags.map((tag) => ({
@@ -214,7 +240,6 @@ export const topicRouter = createTRPCRouter({
                     //     })),
                     // },
                     // // Create a single background imag
-                    bgimages: input.bgimages,
                 }
             });
         }),

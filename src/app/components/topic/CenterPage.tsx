@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import ImageSample from "../images/simple_b.png";
 import Image from "next/image";
 import { trpc } from "~/server/utils/trpc";
 
@@ -25,7 +24,6 @@ export default function TopicCenter({ userData }: Props) {
     // const selectedLink = "/home";
     const pathname = usePathname();
     const tags: string[] = ["devchallenge", "nylaschallenge", "ai", "api"];
-    const imageData = ImageSample;
     const userId = pathname.split('/')[2] ?? '';
     const topicId = pathname.split('/')[3] ?? '';
     const [isDialogOpenForHidden, setIsDialogOpenForHidden] = useState(false);
@@ -118,21 +116,19 @@ export default function TopicCenter({ userData }: Props) {
                     {/* Title */}
                     <div>
                         {/* BackgroundImage */}
-                        <a href="#"
+                        {topic?.bgimage.url && 
+                            <a href="#"
                             className="block rounded-[0.375rem] max-h-[calc(100vh - 56px - 2*1rem)] overflow-hidden "
                         >
                             <Image
-                                src={imageData}
-                                alt={"Image Data"}
+                                src={topic.bgimage.url}
+                                alt={topic.bgimage.id}
                                 width={1000}
                                 height={420}
                                 className="apect-[1000/420] m-auto block w-full h-auto object-contain"
                             />
-                            {/* <img src={imageData}
-                                    className="apect-[1000/420] m-auto block w-full h-auto object-contain "
-                                /> */}
-                            {/* <span className="m-auto block w-full h-auto bg-green"></span> */}
                         </a>
+                        }
                         <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] flex flex-col pt-[1.25rem] sm:box-border">
                             <div className="sm:items-start sm:flex-row flex flex-col">
                                 {userData?.id === userId && <div className="sm:mb-0 sm:mb-0 mb-4 sm:order-[9999] bg-topicEdit border-[1px] border-solid border-topicEdit rounded-[0.375rem] p-[0.25rem] ">

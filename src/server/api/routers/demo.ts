@@ -4,31 +4,74 @@ import {
     protectedProcedure,
     publicProcedure,
 } from "~/server/api/trpc";
-import AWS from 'aws-sdk';
 import { env } from "~/env";
-import { prisma } from '~/lib/prisma';
 import { Post } from '@prisma/client';
-
-// Configure AWS SDK
-const s3 = new AWS.S3({
+import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+const client = new S3Client({
+    region: env.AWS_REGION,
     credentials: {
         secretAccessKey: env.AWC_SECRET_ACCESS_KEY,
         accessKeyId: env.AWS_ACCESS_KEY_ID,
     },
-    region: env.AWS_REGION,
 });
-// const s3 = new AWS.S3();
 
 interface ImageMetaData extends Post {
     url: string,
 };
 
 export const demoRouter = createTRPCRouter({
+    getPresignedURLForDelete: protectedProcedure
+        .input(z.object({
+            bgimageId: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            const params = new DeleteObjectCommand({
+                Bucket: env.S3_BUCKET_NAME,
+                Key: `${ctx.session.user.id}/${input.bgimageId}`,
+            });
+
+            const url = await getSignedUrl(client, params, { expiresIn: 3600 });
+
+            return url;
+        }),
+
+    getPresignedURLForShow: protectedProcedure
+        .input(z.object({
+            bgimageId: z.string(),
+        }))
+        .query(async ({ ctx, input }) => {
+            // const params = new GetObjectCommand({
+            //     Bucket: env.S3_BUCKET_NAME,
+            //     Key: `${ctx.session.user.id}/${input.bgimageId}`,
+            // });
+
+            // const url = await getSignedUrl(client, params);
+            const url = `https://${env.S3_BUCKET_NAME}.s3.${env.AWS_REGION}.amazonaws.com/${ctx.session.user.id}/${input.bgimageId}`
+
+            return url;
+        }),
+
+    getPresigneURL: protectedProcedure
+        .input(z.object({
+            bgimageId: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            const params = new PutObjectCommand({
+                Bucket: env.S3_BUCKET_NAME,
+                Key: `${ctx.session.user.id}/${input.bgimageId}`,
+                ContentType: 'image/jpeg',
+            });
+            const url = await getSignedUrl(client, params, { expiresIn: 3600 });
+
+            return url;
+        }),
+
     getUserInfo: publicProcedure
         .input(z.object({
             userId: z.string(),
         }))
-        .query(async({ctx, input}) => {
+        .query(async ({ ctx, input }) => {
             const result = await ctx.db.user.findFirst({
                 where: {
                     id: input.userId,
@@ -37,86 +80,4 @@ export const demoRouter = createTRPCRouter({
 
             return result;
         }),
-
-    getImage: protectedProcedure
-        .query(async ({ ctx }) => {
-            const userId = ctx.session.user.id;
-
-            const images = await ctx.db.post.findMany({
-                where: {
-                    userId: userId,
-                }
-            });
-
-            const extendedImage: ImageMetaData[] = await Promise.all(images.map((async (image) => {
-                return {
-                    ...image,
-                    url: await s3.getSignedUrlPromise('getObject', {
-                        Bucket: env.S3_BUCKET_NAME,
-                        Key: `${userId}/${image.id}`,
-                    })
-                }
-            })));
-
-            return extendedImage;
-        }),
-
-    uploadImage: protectedProcedure
-        .input(z.object({ type: z.string() }))
-        .mutation(async ({ ctx, input }) => {
-            // const userId = ctx.session.user.id;
-
-            // const image = await ctx.db.post.create({
-            //     data: {
-            //         userId: userId,
-            //     }
-            // });
-
-
-            // const params = {
-            //     Bucket: env.S3_BUCKET_NAME,
-            //     Fields: {
-            //         Key: `${userId}/${image.id}`,
-            //     },
-            //     Conditions: [
-            //         ["start-with-", "$Content-Type", "image/"],
-            //         ["content-length-range", 0, 10000000],
-            //     ],
-            //     Expires: 60,
-            // };
-            // return s3.createPresignedPost(params);
-            // return new Promise((resolve, reject) => {
-            //     s3.createPresignedPost({
-            //         Bucket: env.S3_BUCKET_NAME,
-            //         Fields: {
-            //             Key: `${userId}/${image.id}`,
-            //         },
-            //         Conditions: [
-            //             ["start-with-", "$Content-Type", "image/"],
-            //             ["content-length-range", 0, 10000000],
-            //         ],
-            //         Expires: 60,
-            //     }, (err, signed) => {
-            //         if (err) return reject(err);
-            //         resolve(signed);
-            //     });
-            // })
-            const userId = ctx.session.user.id;
-            const image = await ctx.db.post.create({
-                data: {
-                    userId: userId,
-                }
-            });
-
-            const params = {
-                Bucket: env.S3_BUCKET_NAME,
-                Key: `${userId}/${image.id}`,
-                Expires: 60, // The URL will expire in 60 seconds
-                ContentType: `${input.type}`, // Adjust this based on your file type
-                ACL: 'public-read' // Optional: Set permissions
-            };
-
-            const url = await s3.getSignedUrlPromise('putObject', params);
-            return { url };
-        })
 });
