@@ -57,7 +57,7 @@ export default function TopicCenter({ userData }: Props) {
         e.preventDefault();
         setIsDialogOpenForHidden(true);
     };
-    const handleDialogCloseForHidden = () => {
+    const handleDialogCloseForHidden = async () => {
         const handleStatus = async() => {
             const result = await mutation.mutateAsync({
                 topicId: topicId,
@@ -68,7 +68,7 @@ export default function TopicCenter({ userData }: Props) {
         };
 
         try {
-            handleStatus();
+            await handleStatus();
         }
         catch(err) {
             console.log("Error occured during change isPrivate: ", err);
