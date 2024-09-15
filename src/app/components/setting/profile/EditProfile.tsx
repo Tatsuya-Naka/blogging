@@ -74,8 +74,9 @@ export default function EditProfile({ userData }: Props) {
     const {data: profileImageURL, refetch: refetchImage} = trpc.profile.setSignedURL.useQuery();
 
     const handleIconImage = async (e: React.FormEvent<HTMLInputElement>) => {
-        setImageFile(e.currentTarget.files?.[0]);
         e.preventDefault();
+        setImageFile(e.currentTarget.files?.[0]);
+        await refetchImage();
     };
 
     useEffect(() => {
@@ -110,7 +111,6 @@ export default function EditProfile({ userData }: Props) {
 
     useEffect(() => {
         console.log("Refetch image");
-        void refetchImage();
     }, [imageFile]);
 
 
@@ -264,7 +264,7 @@ export default function EditProfile({ userData }: Props) {
                                         alt={image ?? ""}
                                         width={420}
                                         height={420}
-
+                                        className="w-full h-full object-center overflow-hiddenr"
                                     />
                                 </span>
 
