@@ -21,6 +21,7 @@ export default function EditProfile({ userData }: Props) {
     const [name, setName] = useState<string>("");
     const [bio, setBio] = useState<string>("");
     const [image, setImage] = useState<string>("");
+    const [imageFile, setImageFile] = useState<File | null | undefined>(null);
 
     useEffect(() => {
         setName(profile?.name ?? "");
@@ -53,7 +54,7 @@ export default function EditProfile({ userData }: Props) {
                 image: image,
                 bio: bio,
             });
-            
+
             console.log("Result of Editting Profile: ", result);
 
             setIsUpdated(true);
@@ -67,6 +68,50 @@ export default function EditProfile({ userData }: Props) {
             router.push(`/profile/${userData?.id}`);
         }
     }, [isUpdated, router]);
+
+    // get presigned URL
+    const urlMutate = trpc.profile.getPresignedURL.useMutation();
+    const {data: profileImageURL, refetch: refetchImage} = trpc.profile.setSignedURL.useQuery();
+
+    const handleIconImage = async (e: React.FormEvent<HTMLInputElement>) => {
+        setImageFile(e.currentTarget.files?.[0]);
+        e.preventDefault();
+    };
+
+    useEffect(() => {
+        if (!imageFile) return;
+        const putObjectIntoS3 = async () => {
+            try {
+                const url = await urlMutate.mutateAsync();
+                // console.log("PresignedURL: ", url);
+
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': imageFile.type,
+                    },
+                    body: imageFile,
+                });
+
+                if (!response.ok) {
+                    console.log("Upload Error");
+                }
+
+                console.log("Upload new Image");
+                setImage(profileImageURL ?? "");
+                await refetchImage();
+            }
+            catch (err) {
+                console.log("Error occured during uploading image into AWS S3 in profile setting: ", err);
+            }
+        }
+        void putObjectIntoS3();
+    }, [imageFile]);
+
+    useEffect(() => {
+        console.log("Refetch image");
+        void refetchImage();
+    }, [imageFile]);
 
 
     return (
@@ -224,8 +269,9 @@ export default function EditProfile({ userData }: Props) {
                                 </span>
 
                                 <input
-                                    className="flex p-3 w-full flex-1 items-center bg-white text-loginText shadow-custom-light-border rounded-[0.375rem] leading-[1.5] "
+                                    className="flex p-3 w-full flex-1 items-center bg-white pointer text-loginText shadow-custom-light-border rounded-[0.375rem] leading-[1.5] "
                                     type="file"
+                                    onChange={handleIconImage}
                                 />
                             </div>
                         </div>

@@ -213,7 +213,7 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
                                     alt={userData?.name ?? ""}
                                     width={32}
                                     height={32}
-                                    style={{ borderRadius: '50%' }}
+                                    className="rounded-full h-8 w-8 inline-block align-bottom"
                                 />
                                 {/* <img src={userData?.image ?? ""} alt={userData?.name ?? ""} style={{borderRadius: "50%", width: "100%", height: "auto"}} /> */}
                             </button>

@@ -31,7 +31,7 @@ export default function ListPost({ key, image, user, title, url }: CustomeType) 
                                         alt={user ?? ""}
                                         width={90}
                                         height={90}
-                                        className="rounded-full"
+                                        className="rounded-full h-8 w-8 inline-block"
                                     />
                                 </a>
                             </div>

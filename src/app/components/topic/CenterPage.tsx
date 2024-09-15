@@ -130,7 +130,7 @@ export default function TopicCenter({ userData }: Props) {
                                     alt={topic.bgimage.id}
                                     width={1000}
                                     height={420}
-                                    className="apect-[1000/420] m-auto block w-full h-auto object-contain"
+                                    className="apect-[1000/420] m-auto block w-full h-auto object-contain "
                                 />
                             </a>
                         }
@@ -178,7 +178,7 @@ export default function TopicCenter({ userData }: Props) {
                                                 alt={topic?.user.name ?? ""}
                                                 height={40}
                                                 width={40}
-                                                className="rounded-full"
+                                                className="rounded-full h-10 w-10 "
                                             />
                                         </a>
                                     </div>
@@ -289,6 +289,7 @@ export default function TopicCenter({ userData }: Props) {
                                         alt={userData?.name ?? ""}
                                         width={32}
                                         height={32}
+                                        className="rounded-full md:h-[2rem] md:w-[2rem] h-[1.5rem] w-[1.5rem]"
                                     /> :
                                         <span className="mr-2 shrink-0 inline-block rounded-full relative bg-emerald-400 w-[32px] h-[32px] overflow-hidden align-middle ">
                                             <img src="" className="" />
