@@ -61,6 +61,9 @@ export default function EditProfile({ userData }: Props) {
         } catch (err) {
             console.log("Error occured durign editting profile: ", err);
         }
+        setName("");
+        setImage("");
+        setBio("");
     };
 
     useEffect(() => {
@@ -76,7 +79,7 @@ export default function EditProfile({ userData }: Props) {
     const handleIconImage = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         setImageFile(e.currentTarget.files?.[0]);
-        await refetchImage();
+        // await refetchImage();
     };
 
     useEffect(() => {

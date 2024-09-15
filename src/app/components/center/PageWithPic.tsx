@@ -100,7 +100,7 @@ export default function PageWithPic({ userData, userId, image, user, team, date,
 
                             <div className="relative mr-[0.5rem] block ">
                                 <div className="...">
-                                    <a className="md:hidden font-[500] text-loginText p-1" href={`/user/${userId}`}>
+                                    <a className="md:hidden font-[500] text-loginText p-1 cursor-pointer" href={`/user/${userId}`}>
                                         {user}
                                     </a>
 

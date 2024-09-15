@@ -154,13 +154,13 @@ export default function TopicCenter({ userData }: Props) {
                                     </a> */}
                                     {isPrivate ?
                                         <div onClick={handleDialogOpenForArchive}
-                                            className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
+                                            className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 cursor-pointer"
                                         >
                                             Archive
                                         </div>
                                         :
                                         <div onClick={handleDialogOpenForHidden}
-                                            className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 "
+                                            className="px-2 text-[#3d3d3d] text-[0.875] relative inline-block pointer border-0 cursor-pointer"
                                         >
                                             Hide
                                         </div>
