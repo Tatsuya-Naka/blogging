@@ -34,29 +34,32 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
         console.log("Click Edit Bar");
     }
 
-    const handleTyping = (e: React.FormEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        setTyping((e.target as HTMLInputElement).value);
-    };
-
     useEffect(() => {
         console.log(typing);
     }, [typing]);
 
     const { data: result, refetch: refetchResult } = trpc.topic.getSearchingLimits.useQuery({
-        typing,
+        typing: typing,
     });
 
     useEffect(() => {
         console.log("Result: ", result);
     }, [result]);
 
+    const handleTyping = (e: React.FormEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        setTyping((e.target as HTMLInputElement).value);
+    };
+
     const url = `/search?query=${typing}`;
 
     // handle search
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsClicked(false);
+        setTyping("");
         router.push(url);
+        refetchResult();
     };
 
     return (

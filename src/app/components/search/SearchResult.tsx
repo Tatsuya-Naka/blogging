@@ -27,8 +27,13 @@ export default function SearchResult({ userData }: Props) {
     });
 
     useEffect(() => {
+        console.log("Query from search Result: ", query);
+        setTyping(query);
+    }, [query]);
+
+    useEffect(() => {
         console.log("Searching for ", query);
-        console.log("Result: ", result);
+        console.log("Result from search: ", result);
     }, [result]);
 
     const handleTyping = (e: React.FormEvent<HTMLInputElement>) => {
@@ -122,7 +127,8 @@ export default function SearchResult({ userData }: Props) {
                 </nav>
             </div>
 
-            <div className="lg:grid-cols-[240px_1fr] md:grid-cols-[2fr_5fr] max-w-[1024px] text-[1rem] mx-auto my-0 grid lg:gap-[1rem] md:gap-[0.5rem] ">
+            {/* delete mx-auto instead add text-cetner because when I use query, the page width is shrinked somehow */}
+            <div className="lg:grid-cols-[240px_1fr] md:grid-cols-[2fr_5fr] max-w-[1024px] text-[1rem] test-center my-0 grid lg:gap-[1rem] md:gap-[0.5rem] ">
                 <div className="sm:block hidden lg:w-[240px] md:w-[2fr]">
                     <ul className="m-0 p-0 sm:block py-[0.25rem] my-[calc(-1*0.25rem)] ">
                         <li>
@@ -142,7 +148,7 @@ export default function SearchResult({ userData }: Props) {
                     </ul>
                 </div>
 
-                <div className="min-w-0 ">
+                <div className="min-w-0 lg:w-[1fr] md:w-[5fr] w-full">
                     <div>
                         {result?.map((result) => {
                             return (

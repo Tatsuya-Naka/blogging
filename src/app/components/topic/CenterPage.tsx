@@ -130,7 +130,7 @@ export default function TopicCenter({ userData }: Props) {
                                     alt={topic.bgimage.id}
                                     width={1000}
                                     height={420}
-                                    className="apect-[1000/420] m-auto block w-full h-auto object-contain "
+                                    className="object-cover aspect-[5/2] max-h-[420px] max-w-[1000px] m-auto block w-full h-auto object-contain "
                                 />
                             </a>
                         }
