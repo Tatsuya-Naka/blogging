@@ -59,7 +59,7 @@ export default function Header({ userData, isSideBar, setIsSideBar }: Props) {
         setIsClicked(false);
         setTyping("");
         router.push(url);
-        refetchResult();
+        await refetchResult();
     };
 
     return (
