@@ -4,6 +4,7 @@ import ListPost from "./ListPost";
 import { useState, useEffect } from "react";
 import { trpc } from "~/server/utils/trpc";
 import { useRouter } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -40,7 +41,7 @@ export default function ProfileUser({ userData }: Props) {
         router.push("/setting/profile");
     };
 
-    const handleRefetch = async() => {
+    const handleRefetch = async () => {
         await refetchProfle();
     };
 
@@ -59,13 +60,21 @@ export default function ProfileUser({ userData }: Props) {
                         <div className="mt-2 md:rounded-[0.375rem] bg-white text-engineBorderColor lg:p-[calc(1.5rem*-1)] md:text-center sm:p-[calc(1rem*-1)] p-[calc(-1*0.75rem)] ">
                             <div className="relative md:mt-[calc(-1*4rem)] md:mb-[0.75rem] mt-[calc(-1*2rem)] mb-[1rem] px-[1rem] ">
                                 <span className="md:p-[0.5rem] md:w-[8rem] md:h-[8rem] w-[4rem] h-[4rem] bg-black p-[0.25rem] inline-block rounded-full overflow-hidden relative shrink-0 ">
-                                    <Image
-                                        src={image ?? ""}
-                                        alt={name ?? "Admin"}
-                                        width={128}
-                                        height={128}
-                                        className="h-full w-full rounded-full align-bottom inline-block"
-                                    />
+                                    {image ?
+                                        <Image
+                                            src={image ?? ""}
+                                            alt={name ?? "Admin"}
+                                            width={128}
+                                            height={128}
+                                            className="h-full w-full rounded-full align-bottom inline-block"
+                                        />
+                                        :
+                                        <>
+                                            <Skeleton className="inline-block rounded-full h-full w-full bg-gray-200 animate-pulse "
+                                            />
+                                        </>
+                                    }
+
                                 </span>
 
                                 <div className="md:top-[4rem] flext right-0 top-[2rem] absolute left-0 justify-end flex pt-[1.5rem] pr-[1.5rem] ">

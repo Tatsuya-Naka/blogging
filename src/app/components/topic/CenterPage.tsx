@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import Image from "next/image";
 import { trpc } from "~/server/utils/trpc";
+import Skeleton from "react-loading-skeleton";
 
 type CustomType = {
     name?: string | null;    // Allow string, null, or undefined
@@ -30,7 +31,6 @@ export default function TopicCenter({ userData }: Props) {
     const [isDialogOpenForArchive, setIsDialogOpenForArchive] = useState(false);
     const [isPrivate, setIsPrivate] = useState(true);
 
-
     useEffect(() => {
         const id = userData?.id;
         if (id === userId) console.log("Wonderful same");
@@ -40,8 +40,7 @@ export default function TopicCenter({ userData }: Props) {
 
     const { data: topic, refetch: refetchTopic } = trpc.topic.getTopic.useQuery({
         userId: userId, topicId: topicId
-    }
-    );
+    });
 
     useEffect(() => {
         setIsPrivate(topic?.isPrivate ?? true);
@@ -121,7 +120,29 @@ export default function TopicCenter({ userData }: Props) {
                     {/* Title */}
                     <div>
                         {/* BackgroundImage */}
-                        {topic?.bgimage.url &&
+                        {topic ?
+                            (
+                                topic?.bgimage.url && <a href="#"
+                                    className="block rounded-[0.375rem] max-h-[calc(100vh - 56px - 2*1rem)] overflow-hidden "
+                                >
+                                    <Image
+                                        src={topic.bgimage.url}
+                                        alt={topic.bgimage.id}
+                                        width={1000}
+                                        height={420}
+                                        className="object-cover aspect-[5/2] max-h-[420px] max-w-[1000px] m-auto block w-full h-auto object-contain "
+                                    />
+                                </a>
+                            )
+                            :
+
+                            <>
+                                <Skeleton className="animate-pulse bg-gray-200 aspect-[5/2] m-auto inline-block w-full h-auto" />
+                                <Skeleton count={1} />
+                            </>
+
+                        }
+                        {/* {topic?.bgimage.url &&
                             <a href="#"
                                 className="block rounded-[0.375rem] max-h-[calc(100vh - 56px - 2*1rem)] overflow-hidden "
                             >
@@ -133,7 +154,7 @@ export default function TopicCenter({ userData }: Props) {
                                     className="object-cover aspect-[5/2] max-h-[420px] max-w-[1000px] m-auto block w-full h-auto object-contain "
                                 />
                             </a>
-                        }
+                        } */}
                         <div className="lg:px-[4rem] lg:pt-[2rem] md:px-[3rem] md:pt-[2rem] px-[1.25rem] flex flex-col pt-[1.25rem] sm:box-border">
                             <div className="sm:items-start sm:flex-row flex flex-col">
                                 {userData?.id === userId && <div className="sm:mb-0 sm:mb-0 mb-4 sm:order-[9999] bg-topicEdit border-[1px] border-solid border-topicEdit rounded-[0.375rem] p-[0.25rem] ">
@@ -169,27 +190,41 @@ export default function TopicCenter({ userData }: Props) {
                                 <div className="flex mb-5 flex-1 items-start">
                                     {/* Icon */}
                                     <div className="relative ">
-                                        <a href="#"
-                                            className=""
-                                        >
-                                            {/* <img className="rounded-full" src="https://media.dev.to/cdn-cgi/image/width=50,height=50,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F2023473%2F6e1b385a-4152-4773-a392-598d4981575d.png" width="40" height="40" alt="なかごみ龍也"></img> */}
-                                            <Image
-                                                src={topic?.user.image ?? ""}
-                                                alt={topic?.user.name ?? ""}
-                                                height={40}
-                                                width={40}
-                                                className="rounded-full h-10 w-10 "
-                                            />
-                                        </a>
+                                        {topic ?
+                                            (topic.user.image &&
+
+                                                <a href="#"
+                                                    className=""
+                                                >
+                                                    {/* <img className="rounded-full" src="https://media.dev.to/cdn-cgi/image/width=50,height=50,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F2023473%2F6e1b385a-4152-4773-a392-598d4981575d.png" width="40" height="40" alt="なかごみ龍也"></img> */}
+                                                    <Image
+                                                        src={topic?.user.image ?? ""}
+                                                        alt={topic?.user.name ?? ""}
+                                                        height={40}
+                                                        width={40}
+                                                        className="rounded-full h-10 w-10 "
+                                                    />
+                                                </a>
+                                            )
+
+                                            :
+                                            <>
+                                                <Skeleton height={40} width={40} className="inline-block rounded-full h-10 w-10 bg-gray-200 animate-pulse " />
+                                                <Skeleton count={1} />
+                                            </>
+                                        }
+
                                     </div>
 
                                     <div className="pl-3 flex-1 flex flex-col">
                                         <a href="#"
                                             className="font-[500]">
-                                            {topic ? topic.user.name : ""}
+                                            {topic ? topic.user.name : <>
+                                                <Skeleton count={1} className="inline-block mb-[1rem] rounded-[0.375rem] w-[12rem] h-full bg-gray-200 animate-pulse" />
+                                            </>}
                                         </a>
                                         <p className="text-[0.75rem] text-[#717171] ">
-                                            Posted on Sep 1
+                                            {topic ? "Posted on Sep 1" : <><Skeleton count={1} className="inline-block rounded-[0.375rem] w-[8rem] h-full bg-gray-200 animate-pulse" /></>}
                                         </p>
                                     </div>
                                 </div>
@@ -197,7 +232,14 @@ export default function TopicCenter({ userData }: Props) {
 
                             {/* Title */}
                             <h1 className="lg:text-[3rem] md:text-[2.25rem] sm:font-800] font-[700] leading-[1.25] text-[1.875rem] mb-2 ">
-                                {topic && topic.title}
+                                {topic ? (
+                                    topic.title && topic.title
+                                )
+                                    :
+                                    <>
+                                        <Skeleton count={1} className="inline-block rounded-[0.375rem] w-full h-full bg-gray-200 animate-pulse" />
+                                    </>
+                                }
                             </h1>
 
                             {/* Tags */}
@@ -214,9 +256,16 @@ export default function TopicCenter({ userData }: Props) {
                     {/* content */}
                     <div className="lg:py-[2rem] lg:px-[4rem] p-[0.75rem] md:px-[3rem] md:p-[2rem]">
                         <div className="text-[1.25rem] ">
-                            <p>
+                            {topic ?
+                                (topic.description && topic.description)
+                                :
+                                <>
+                                    <Skeleton className="inline-block rounded-[0.375rem] w-full h-full bg-gray-200 animate-pulse" count={1}/>
+                                </>
+                            }
+                            {/* <p>
                                 {topic && topic.description}
-                            </p>
+                            </p> */}
                             {/* <p className="mb-[1.25rem] ">
                                 When working with Tailwind CSS, you're already familiar with its utility-first approach, making styling your applications incredibly efficient. However, sometimes you need features that go beyond the core utility set. One such feature is text shadows, which aren’t natively provided by Tailwind. But don't worry—using a third-party plugin, you can extend Tailwind CSS to include customizable text shadows!
                             </p>
